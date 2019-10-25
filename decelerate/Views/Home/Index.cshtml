@@ -1,0 +1,30 @@
+﻿@model decelerate.Views.Home.IndexModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="display-4 text-center">Welcome to decelerate</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            This tool allows you to let the presenter know if you're almost falling asleep and you want the talk to be faster,
+            if you can't keep up or if it's right on the spot. Imagine it like both a brake pedal and a gas pedal, allowing you to
+            <em>decelerate</em> (hence the name) or accelerate the talk.
+        </p>
+        <p>Please enter your name and press <em>Start</em> to continue.</p>
+    </div>
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Enter your name" required asp-for="name" />
+                <div class="invalid-feedback" asp-validation-for="Name"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Start</button>
+        </form>
+    </div>
+</div>
