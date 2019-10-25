@@ -41,11 +41,13 @@ namespace decelerate.Controllers
                     return StatusCode(500);
                 }
                 var jwt = new JWT<JWTPayload>(key);
-                var payload = new JWTPayload(input.name);
-                var token = jwt.encode(payload);
+                var payload = new JWTPayload(input.Name);
+                var token = jwt.Encode(payload);
                 /* Set JWT cookie: */
-                var cookieOptions = new CookieOptions();
-                cookieOptions.HttpOnly = true;
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true
+                };
                 Response.Cookies.Append("session", token, cookieOptions);
                 /* Return response: */
                 return RedirectToAction("Index", "UserArea");

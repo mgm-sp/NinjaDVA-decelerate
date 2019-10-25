@@ -10,8 +10,8 @@ namespace decelerate.Views.UserArea
     {
         public IndexModel(JWTPayload jwtPayload)
         {
-            this.jwtPayload = jwtPayload;
+            this.JWTpayload = jwtPayload;
         }
-        public JWTPayload jwtPayload { get; set; }
+        public JWTPayload JWTpayload { get; set; }
     }
 }

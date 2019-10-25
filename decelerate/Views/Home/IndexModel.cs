@@ -9,6 +9,6 @@ namespace decelerate.Views.Home
     public class IndexModel
     {
         [Required, MaxLength(50)]
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -30,8 +30,7 @@ namespace decelerate.Controllers
                 return StatusCode(500);
             }
             var jwt = new JWT<JWTPayload>(key);
-            string errorMessage;
-            var jwtPayload = jwt.decode(Request.Cookies["session"], out errorMessage);
+            var jwtPayload = jwt.Decode(Request.Cookies["session"], out string errorMessage);
             if (jwtPayload == null)
             {
                 _logger.LogWarning($"JWT Error: {errorMessage}");

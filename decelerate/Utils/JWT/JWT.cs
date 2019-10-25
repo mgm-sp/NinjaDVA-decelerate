@@ -18,20 +18,20 @@ namespace decelerate.Utils.JWT
             var keyBytes = Encoding.UTF8.GetBytes(key);
             hmac = new HMACSHA256(keyBytes);
         }
-        public string encode(T payload)
+        public string Encode(T payload)
         {
             /* Create and encode header: */
             var header = new JWTHeader("JWT", "HS256");
-            var headerEncoded = encodeObject(header);
+            var headerEncoded = EncodeObject(header);
             /* Encode payload: */
-            var payloadEncoded = encodeObject(payload);
+            var payloadEncoded = EncodeObject(payload);
             /* Create signature: */
-            var signatureEncoded = createSignature(headerEncoded, payloadEncoded);
+            var signatureEncoded = CreateSignature(headerEncoded, payloadEncoded);
             /* Return everything: */
             return headerEncoded + "." + payloadEncoded + "." + signatureEncoded;
         }
 
-        public T decode(string token, out string errorMessage)
+        public T Decode(string token, out string errorMessage)
         {
             /* Split the token into parts: */
             var tokenParts = token.Split(".");
@@ -50,7 +50,7 @@ namespace decelerate.Utils.JWT
                 {
                     tokenBytes = WebEncoders.Base64UrlDecode(tokenParts[i]);
                 }
-                catch (FormatException _)
+                catch (FormatException)
                 {
                     errorMessage = $"base64-decoding of part {i} failed";
                     return null;
@@ -60,12 +60,12 @@ namespace decelerate.Utils.JWT
                 {
                     jsonParts.Add(Encoding.UTF8.GetString(tokenBytes));
                 }
-                catch (ArgumentNullException _)
+                catch (ArgumentNullException)
                 {
                     errorMessage = $"utf8-decoding of part {i} failed with ArgumentNullException";
                     return null;
                 }
-                catch (ArgumentException _)
+                catch (ArgumentException)
                 {
                     errorMessage = $"utf8-decoding of part {i} failed with ArgumentException";
                     return null;
@@ -77,7 +77,7 @@ namespace decelerate.Utils.JWT
             {
                 header = (JWTHeader)JsonConvert.DeserializeObject(jsonParts[0], typeof(JWTHeader));
             }
-            catch (JsonReaderException _)
+            catch (JsonReaderException)
             {
                 errorMessage = "JSON-decoding the header failed";
                 return null;
@@ -96,7 +96,7 @@ namespace decelerate.Utils.JWT
             /* Check signature: */
             if (header.alg == "HS256")
             {
-                var correctSignature = createSignature(tokenParts[0], tokenParts[1]);
+                var correctSignature = CreateSignature(tokenParts[0], tokenParts[1]);
                 if (correctSignature != tokenParts[2])
                 {
                     errorMessage = "invalid signature";
@@ -109,7 +109,7 @@ namespace decelerate.Utils.JWT
             {
                 payload = (T)JsonConvert.DeserializeObject(jsonParts[1], typeof(T));
             }
-            catch (JsonReaderException _)
+            catch (JsonReaderException)
             {
                 errorMessage = "JSON-decoding the payload failed";
                 return null;
@@ -119,7 +119,7 @@ namespace decelerate.Utils.JWT
             return payload;
         }
 
-        private string encodeObject(Object obj)
+        private string EncodeObject(Object obj)
         {
             /* JSON-encode: */
             var json = JsonConvert.SerializeObject(obj);
@@ -129,7 +129,7 @@ namespace decelerate.Utils.JWT
             return WebEncoders.Base64UrlEncode(bytes);
         }
 
-        private string createSignature(string headerEncoded, string payloadEncoded)
+        private string CreateSignature(string headerEncoded, string payloadEncoded)
         {
             var stringToSign = headerEncoded + "." + payloadEncoded;
             var bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
