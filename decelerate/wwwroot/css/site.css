@@ -1,4 +1,9 @@
-﻿.sliderArrow {
-    font-size: 2rem;
-    margin-top: -1rem;
+﻿.sliderImage {
+    max-height: 2rem;
+    max-width: 10vw;
+    margin-top: -2rem;
+}
+
+.sliderImageDiv {
+    margin-top: 1rem;
 }
