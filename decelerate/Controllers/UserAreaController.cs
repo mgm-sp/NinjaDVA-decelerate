@@ -27,6 +27,7 @@ namespace decelerate.Controllers
             /* Check auth: */
             if (!IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)) return result;
             /* Show view: */
+            /* TODO: Get current SpeedChoice from the backend! */
             var model = new IndexModel(jwtPayload);
             return View(model);
         }
@@ -41,7 +42,7 @@ namespace decelerate.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation($"User {jwtPayload.name} voted with {input.SpeedChoice}.");
-                /* TODO: Forward this information to the backend! */
+                /* TODO: Forward new SpeedChoice to the backend! */
                 ViewData["ShowModal"] = true;
             }
             /* Show view: */
