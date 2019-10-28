@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using decelerate.Models;
 
 namespace decelerate
 {
@@ -25,6 +27,7 @@ namespace decelerate
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<AuthManager>(new AuthManager(Configuration));
+            services.AddDbContext<DecelerateDbContext>(options => options.UseSqlite(Configuration["database:connection"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

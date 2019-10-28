@@ -13,14 +13,14 @@ namespace decelerate.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IConfiguration _config;
         private readonly AuthManager _authManager;
+        private readonly DecelerateDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration config, AuthManager authManager)
+        public HomeController(ILogger<HomeController> logger, AuthManager authManager, DecelerateDbContext dbContext)
         {
             _logger = logger;
-            _config = config;
             _authManager = authManager;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -40,6 +40,9 @@ namespace decelerate.Controllers
             /* TODO: Prevent duplicate names! */
             if (ModelState.IsValid)
             {
+                /* Add user to database: */
+                _dbContext.Add(new User { Name = input.Name });
+                _dbContext.SaveChanges();
                 /* Create JWT: */
                 var token = _authManager.GetToken(new JWTPayload(input.Name));
                 /* Set JWT cookie: */

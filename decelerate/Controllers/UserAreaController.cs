@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using decelerate.Views.UserArea;
 using decelerate.Utils.JWT;
+using decelerate.Models;
 
 namespace decelerate.Controllers
 {
@@ -15,11 +16,13 @@ namespace decelerate.Controllers
     {
         private readonly ILogger<UserAreaController> _logger;
         private readonly AuthManager _authManager;
+        private readonly DecelerateDbContext _dbContext;
 
-        public UserAreaController(ILogger<UserAreaController> logger, AuthManager authManager)
+        public UserAreaController(ILogger<UserAreaController> logger, AuthManager authManager, DecelerateDbContext dbContext)
         {
             _logger = logger;
             _authManager = authManager;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
