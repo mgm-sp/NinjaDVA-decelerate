@@ -41,15 +41,7 @@ namespace decelerate.Controllers
             if (ModelState.IsValid)
             {
                 /* Create JWT: */
-                var key = _config.GetValue<string>("JwtKey");
-                if (key.Length != 32)
-                {
-                    _logger.LogError("Invalid JwtKey");
-                    return StatusCode(500);
-                }
-                var jwt = new JWT<JWTPayload>(key);
-                var payload = new JWTPayload(input.Name);
-                var token = jwt.Encode(payload);
+                var token = _authManager.GetToken(new JWTPayload(input.Name));
                 /* Set JWT cookie: */
                 Response.Cookies.Append("session", token, new CookieOptions
                 {

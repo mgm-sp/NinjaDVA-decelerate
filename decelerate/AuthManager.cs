@@ -14,29 +14,29 @@ namespace decelerate
         public AuthManager(IConfiguration config)
         {
             /* Get JWT key: */
-            key = config.GetValue<string>("JwtKey");
+            var key = config.GetValue<string>("JwtKey");
             if (key.Length != 32)
             {
                 /* Invalid key: */
                 throw new ArgumentException("Invalid JwtKey configured");
             }
+            /* Create JWT instance: */
+            jwt = new JWT<JWTPayload>(key);
         }
 
         public bool IsAuthenticated(string sessionCookie, out JWTPayload jwtPayload, out string errorMessage)
         {
             /* Parse JWT token: */
-            var jwt = new JWT<JWTPayload>(key);
             jwtPayload = jwt.Decode(sessionCookie, out errorMessage);
             /* Check payload: */
-            if (jwtPayload == null)
-            {
-                /* Not authenticated: */
-                return false;
-            }
-            /* Authenticated: */
-            return true;
+            return (jwtPayload != null);
         }
 
-        private readonly string key;
+        public string GetToken(JWTPayload payload)
+        {
+            return jwt.Encode(payload);
+        }
+
+        private readonly JWT<JWTPayload> jwt;
     }
 }
