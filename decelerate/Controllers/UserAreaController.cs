@@ -20,6 +20,8 @@ namespace decelerate.Controllers
             _logger = logger;
             _config = config;
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
             /* Check auth: */
@@ -28,6 +30,24 @@ namespace decelerate.Controllers
             var model = new IndexModel(jwtPayload);
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult Index(IndexModel input)
+        {
+            /* Check auth: */
+            if (!IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)) return result;
+            input.JWTpayload = jwtPayload;
+            /* Check input: */
+            if (ModelState.IsValid)
+            {
+                _logger.LogInformation($"User {jwtPayload.name} voted with {input.SpeedChoice}.");
+                /* TODO: Forward this information to the backend! */
+                ViewData["ShowModal"] = true;
+            }
+            /* Show view: */
+            return View(input);
+        }
+
         private bool IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)
         {
             /* Parse JWT token: */
