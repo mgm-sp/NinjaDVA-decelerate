@@ -14,17 +14,23 @@ namespace decelerate.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _config;
+        private readonly AuthManager _authManager;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration config)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config, AuthManager authManager)
         {
             _logger = logger;
             _config = config;
+            _authManager = authManager;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            /* TODO: Redirect to UserArea if user is authenticated! */
+            if (_authManager.IsAuthenticated(Request.Cookies["Session"], out JWTPayload _, out string _))
+            {
+                /* User is authenticated, redirect to user area: */
+                return RedirectToAction("Index", "UserArea");
+            }
             return View();
         }
 
@@ -45,7 +51,8 @@ namespace decelerate.Controllers
                 var payload = new JWTPayload(input.Name);
                 var token = jwt.Encode(payload);
                 /* Set JWT cookie: */
-                Response.Cookies.Append("session", token, new CookieOptions {
+                Response.Cookies.Append("session", token, new CookieOptions
+                {
                     HttpOnly = true
                 });
                 /* Return response: */

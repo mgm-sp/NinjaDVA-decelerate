@@ -24,6 +24,7 @@ namespace decelerate
         {
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<AuthManager>(new AuthManager(Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

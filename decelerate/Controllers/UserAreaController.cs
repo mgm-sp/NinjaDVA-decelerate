@@ -14,12 +14,12 @@ namespace decelerate.Controllers
     public class UserAreaController : Controller
     {
         private readonly ILogger<UserAreaController> _logger;
-        private readonly IConfiguration _config;
+        private readonly AuthManager _authManager;
 
-        public UserAreaController(ILogger<UserAreaController> logger, IConfiguration config)
+        public UserAreaController(ILogger<UserAreaController> logger, AuthManager authManager)
         {
             _logger = logger;
-            _config = config;
+            _authManager = authManager;
         }
 
         [HttpGet]
@@ -53,7 +53,8 @@ namespace decelerate.Controllers
         public IActionResult Logout()
         {
             /* Remove JWT cookie: */
-            Response.Cookies.Append("session", "", new CookieOptions {
+            Response.Cookies.Append("session", "", new CookieOptions
+            {
                 Expires = DateTime.Now.AddDays(-1)
             });
             /* TODO: Unregister from backend? */
@@ -63,29 +64,17 @@ namespace decelerate.Controllers
 
         private bool IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)
         {
-            /* Parse JWT token: */
-            var key = _config.GetValue<string>("JwtKey");
-            if (key.Length != 32)
+            if (_authManager.IsAuthenticated(Request.Cookies["session"], out jwtPayload, out string errorMessage))
             {
-                /* Invalid key, return false and 500 error: */
-                _logger.LogError("Invalid JwtKey");
-                result = StatusCode(500);
-                jwtPayload = null;
-                return false;
+                result = null;
+                return true;
             }
-            var jwt = new JWT<JWTPayload>(key);
-            jwtPayload = jwt.Decode(Request.Cookies["session"], out string errorMessage);
-            /* Check payload: */
-            if (jwtPayload == null)
+            else
             {
-                /* Not authenticated, return false and redirect: */
-                _logger.LogWarning($"JWT Error: {errorMessage}");
                 result = RedirectToAction("Index", "Home");
+                _logger.LogWarning($"JWT Error: {errorMessage}");
                 return false;
             }
-            /* Authenticated, return true and no result: */
-            result = null;
-            return true;
         }
     }
 }
