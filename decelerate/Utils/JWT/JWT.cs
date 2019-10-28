@@ -33,6 +33,12 @@ namespace decelerate.Utils.JWT
 
         public T Decode(string token, out string errorMessage)
         {
+            /* Check token: */
+            if (token == null)
+            {
+                errorMessage = "token is null";
+                return null;
+            }
             /* Split the token into parts: */
             var tokenParts = token.Split(".");
             if (tokenParts.Length != 3)
