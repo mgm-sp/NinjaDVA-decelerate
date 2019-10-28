@@ -24,6 +24,7 @@ namespace decelerate.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            /* TODO: Redirect to UserArea if user is authenticated! */
             return View();
         }
 
@@ -44,11 +45,9 @@ namespace decelerate.Controllers
                 var payload = new JWTPayload(input.Name);
                 var token = jwt.Encode(payload);
                 /* Set JWT cookie: */
-                var cookieOptions = new CookieOptions
-                {
+                Response.Cookies.Append("session", token, new CookieOptions {
                     HttpOnly = true
-                };
-                Response.Cookies.Append("session", token, cookieOptions);
+                });
                 /* Return response: */
                 return RedirectToAction("Index", "UserArea");
             }

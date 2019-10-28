@@ -23,6 +23,12 @@
     </div>
 </div>
 
+@section Navigation {
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="UserArea" asp-action="Logout">Logout</a>
+    </li>
+}
+
 @section Scripts {
     @if (ViewData["ShowModal"] != null)
     {

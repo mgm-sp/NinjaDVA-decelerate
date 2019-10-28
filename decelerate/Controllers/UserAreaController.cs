@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using decelerate.Views.UserArea;
 using decelerate.Utils.JWT;
 
@@ -47,6 +48,17 @@ namespace decelerate.Controllers
             }
             /* Show view: */
             return View(input);
+        }
+
+        public IActionResult Logout()
+        {
+            /* Remove JWT cookie: */
+            Response.Cookies.Append("session", "", new CookieOptions {
+                Expires = DateTime.Now.AddDays(-1)
+            });
+            /* TODO: Unregister from backend? */
+            /* Redirect to home page: */
+            return RedirectToAction("Index", "Home");
         }
 
         private bool IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)
