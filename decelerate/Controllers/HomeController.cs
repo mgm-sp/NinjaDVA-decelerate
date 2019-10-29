@@ -43,15 +43,24 @@ namespace decelerate.Controllers
             {
                 return View(input);
             }
-            /* Check if user already exists: */
-            if (_dbContext.Users.Count(u => u.Name == input.Name) != 0)
+            /* Check if user already exists and is active: */
+            if (_authManager.IsUserActive(input.Name))
             {
                 ViewData["ErrorMessage"] = "Sorry, this name is already taken.";
                 return View(input);
-                /* TODO: Check timeout! */
             }
-            /* Add user to database: */
-            _dbContext.Add(new User { Name = input.Name, LastAction = DateTime.UtcNow });
+            /* Add user to database or update it: */
+            if (_dbContext.Users.Count(u => u.Name == input.Name) == 0)
+            {
+                _dbContext.Add(new User { Name = input.Name, LastAction = DateTime.UtcNow });
+            }
+            else
+            {
+                var user = _dbContext.Users.First(u => u.Name == input.Name);
+                user.SpeedChoice = null;
+                user.LastAction = DateTime.UtcNow;
+                _dbContext.Update(user);
+            }
             _dbContext.SaveChanges();
             /* Create JWT: */
             var token = _authManager.GetToken(new JWTPayload(input.Name));

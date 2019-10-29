@@ -24,6 +24,20 @@ namespace decelerate
             }
             /* Create JWT instance: */
             _jwt = new JWT<JWTPayload>(key);
+            /* Get user timeout: */
+            _userTimeoutSeconds = config.GetValue<int>("UserTimeoutSeconds");
+            if (_userTimeoutSeconds <= 0)
+            {
+                /* Invalid timeout: */
+                throw new ArgumentException("Invalid UserTimeoutSeconds configured");
+            }
+        }
+
+        public bool IsUserActive(string name)
+        {
+            var count = _dbContext.Users.Count(u => (u.Name == name) &&
+                (u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow));
+            return (count != 0);
         }
 
         public bool IsAuthenticated(string sessionCookie, out User user, out string errorMessage)
@@ -36,15 +50,14 @@ namespace decelerate
                 user = null;
                 return false;
             }
-            /* Check name against the database: */
-            /* TODO: Check timeout! */
-            if (_dbContext.Users.Count(u => u.Name == jwtPayload.name) == 0)
+            /* Check name and timeout against the database: */
+            if (!IsUserActive(jwtPayload.name))
             {
                 user = null;
                 return false;
             }
             /* Get the user: */
-            user = _dbContext.Users.First<User>(u => u.Name == jwtPayload.name);
+            user = _dbContext.Users.First(u => u.Name == jwtPayload.name);
             /* Update last action: */
             user.LastAction = DateTime.UtcNow;
             _dbContext.Users.Update(user);
@@ -60,5 +73,6 @@ namespace decelerate
 
         private readonly JWT<JWTPayload> _jwt;
         private readonly DecelerateDbContext _dbContext;
+        private readonly int _userTimeoutSeconds;
     }
 }
