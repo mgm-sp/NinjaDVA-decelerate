@@ -10,13 +10,6 @@ namespace decelerate.Views.UserArea
 {
     public class IndexModel
     {
-        public IndexModel() {}
-
-        public IndexModel(User user)
-        {
-            this.User = user;
-        }
-
         public User User { get; set; }
 
         [Required, Range(-100, 100)]

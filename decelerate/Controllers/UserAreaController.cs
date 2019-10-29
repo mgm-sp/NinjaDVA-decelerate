@@ -31,7 +31,7 @@ namespace decelerate.Controllers
             /* Check auth: */
             if (!IsAuthenticated(out IActionResult result, out User user)) return result;
             /* Show view: */
-            var model = new IndexModel(user);
+            var model = new IndexModel { User = user };
             model.SpeedChoice = user.SpeedChoice ?? 0;
             return View(model);
         }
