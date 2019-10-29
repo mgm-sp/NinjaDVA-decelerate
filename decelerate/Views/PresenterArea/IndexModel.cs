@@ -58,17 +58,25 @@ namespace decelerate.Views.PresenterArea
         {
             get
             {
-                if (AverageSpeedChoice < -20)
+                if (AverageSpeedChoice < -50)
                 {
-                    return "Slower";
+                    return "talk much slower";
+                }
+                else if (AverageSpeedChoice < -20)
+                {
+                    return "talk a bit slower";
+                }
+                else if (AverageSpeedChoice > 50)
+                {
+                    return "talk much faster";
                 }
                 else if (AverageSpeedChoice > 20)
                 {
-                    return "Faster";
+                    return "talk a bit faster";
                 }
                 else
                 {
-                    return "Perfect";
+                    return "keep your speed";
                 }
             }
         }
