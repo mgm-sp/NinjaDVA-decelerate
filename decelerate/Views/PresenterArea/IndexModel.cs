@@ -39,14 +39,14 @@ namespace decelerate.Views.PresenterArea
         {
             get
             {
-                return 20;
+                return 25;
             }
         }
         public uint DangerThreshold
         {
             get
             {
-                return 50;
+                return 75;
             }
         }
         public string Color
