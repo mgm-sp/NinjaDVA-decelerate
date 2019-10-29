@@ -26,8 +26,10 @@ namespace decelerate
         {
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<AuthManager>(new AuthManager(Configuration));
             services.AddDbContext<DecelerateDbContext>(options => options.UseSqlite(Configuration["database:connection"]));
+            /* Build intermediate service provider and use it to give the DbContext to the AuthManager: */
+            var dbContext = services.BuildServiceProvider().GetService<DecelerateDbContext>();
+            services.AddSingleton<AuthManager>(new AuthManager(Configuration, dbContext));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

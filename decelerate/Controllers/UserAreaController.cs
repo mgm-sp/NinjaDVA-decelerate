@@ -29,10 +29,10 @@ namespace decelerate.Controllers
         public IActionResult Index()
         {
             /* Check auth: */
-            if (!IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)) return result;
+            if (!IsAuthenticated(out IActionResult result, out User user)) return result;
             /* Show view: */
             /* TODO: Get current SpeedChoice from the backend! */
-            var model = new IndexModel(jwtPayload);
+            var model = new IndexModel(user);
             return View(model);
         }
 
@@ -40,12 +40,12 @@ namespace decelerate.Controllers
         public IActionResult Index(IndexModel input)
         {
             /* Check auth: */
-            if (!IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)) return result;
-            input.JWTpayload = jwtPayload;
+            if (!IsAuthenticated(out IActionResult result, out User user)) return result;
+            input.User = user;
             /* Check input: */
             if (ModelState.IsValid)
             {
-                _logger.LogInformation($"User {jwtPayload.name} voted with {input.SpeedChoice}.");
+                _logger.LogInformation($"User {user.Name} voted with {input.SpeedChoice}.");
                 /* TODO: Forward new SpeedChoice to the backend! */
                 ViewData["ShowModal"] = true;
             }
@@ -65,9 +65,9 @@ namespace decelerate.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private bool IsAuthenticated(out IActionResult result, out JWTPayload jwtPayload)
+        private bool IsAuthenticated(out IActionResult result, out User user)
         {
-            if (_authManager.IsAuthenticated(Request.Cookies["session"], out jwtPayload, out string errorMessage))
+            if (_authManager.IsAuthenticated(Request.Cookies["session"], out user, out string errorMessage))
             {
                 result = null;
                 return true;

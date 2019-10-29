@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using decelerate.Utils.JWT;
+using decelerate.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace decelerate.Views.UserArea
@@ -11,12 +12,12 @@ namespace decelerate.Views.UserArea
     {
         public IndexModel() {}
 
-        public IndexModel(JWTPayload jwtPayload)
+        public IndexModel(User user)
         {
-            this.JWTpayload = jwtPayload;
+            this.User = user;
         }
 
-        public JWTPayload JWTpayload { get; set; }
+        public User User { get; set; }
 
         [Required, Range(-100, 100)]
         public int SpeedChoice { get; set; }

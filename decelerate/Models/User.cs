@@ -10,5 +10,7 @@ namespace decelerate.Models
     {
         [Key]
         public string Name { get; set; }
+
+        public int? SpeedChoice { get; set; }
     }
 }

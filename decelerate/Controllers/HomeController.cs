@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ namespace decelerate.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            if (_authManager.IsAuthenticated(Request.Cookies["Session"], out JWTPayload _, out string _))
+            if (_authManager.IsAuthenticated(Request.Cookies["Session"], out User _, out string _))
             {
                 /* User is authenticated, redirect to user area: */
                 return RedirectToAction("Index", "UserArea");
@@ -37,23 +38,30 @@ namespace decelerate.Controllers
         [HttpPost]
         public IActionResult Index(IndexModel input)
         {
-            /* TODO: Prevent duplicate names! */
-            if (ModelState.IsValid)
+            /* Check input: */
+            if (!ModelState.IsValid)
             {
-                /* Add user to database: */
-                _dbContext.Add(new User { Name = input.Name });
-                _dbContext.SaveChanges();
-                /* Create JWT: */
-                var token = _authManager.GetToken(new JWTPayload(input.Name));
-                /* Set JWT cookie: */
-                Response.Cookies.Append("session", token, new CookieOptions
-                {
-                    HttpOnly = true
-                });
-                /* Return response: */
-                return RedirectToAction("Index", "UserArea");
+                return View(input);
             }
-            return View(input);
+            /* Check if user already exists: */
+            if (_dbContext.Users.Count(u => u.Name == input.Name) != 0)
+            {
+                ViewData["ErrorMessage"] = "Sorry, this name is already taken.";
+                return View(input);
+                /* TODO: Check timeout! */
+            }
+            /* Add user to database: */
+            _dbContext.Add(new User { Name = input.Name });
+            _dbContext.SaveChanges();
+            /* Create JWT: */
+            var token = _authManager.GetToken(new JWTPayload(input.Name));
+            /* Set JWT cookie: */
+            Response.Cookies.Append("session", token, new CookieOptions
+            {
+                HttpOnly = true
+            });
+            /* Return response: */
+            return RedirectToAction("Index", "UserArea");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
