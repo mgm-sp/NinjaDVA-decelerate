@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace decelerate.Migrations
 {
@@ -11,7 +12,8 @@ namespace decelerate.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(nullable: false),
-                    SpeedChoice = table.Column<int>(nullable: true)
+                    SpeedChoice = table.Column<int>(nullable: true),
+                    LastAction = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

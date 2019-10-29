@@ -12,5 +12,7 @@ namespace decelerate.Models
         public string Name { get; set; }
 
         public int? SpeedChoice { get; set; }
+
+        public DateTime LastAction { get; set; }
     }
 }

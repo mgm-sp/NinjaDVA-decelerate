@@ -9,7 +9,7 @@ using decelerate.Models;
 namespace decelerate.Migrations
 {
     [DbContext(typeof(DecelerateDbContext))]
-    [Migration("20191029080608_InitialCreate")]
+    [Migration("20191029092736_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,9 @@ namespace decelerate.Migrations
             modelBuilder.Entity("decelerate.Models.User", b =>
                 {
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastAction")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("SpeedChoice")

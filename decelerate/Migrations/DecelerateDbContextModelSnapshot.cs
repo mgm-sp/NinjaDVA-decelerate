@@ -21,6 +21,9 @@ namespace decelerate.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("LastAction")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("SpeedChoice")
                         .HasColumnType("INTEGER");
 

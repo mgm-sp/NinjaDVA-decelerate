@@ -43,8 +43,13 @@ namespace decelerate
                 user = null;
                 return false;
             }
-            /* Return the user: */
+            /* Get the user: */
             user = _dbContext.Users.First<User>(u => u.Name == jwtPayload.name);
+            /* Update last action: */
+            user.LastAction = DateTime.UtcNow;
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+            /* Return success: */
             return true;
         }
 

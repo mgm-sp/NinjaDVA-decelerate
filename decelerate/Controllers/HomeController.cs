@@ -51,7 +51,7 @@ namespace decelerate.Controllers
                 /* TODO: Check timeout! */
             }
             /* Add user to database: */
-            _dbContext.Add(new User { Name = input.Name });
+            _dbContext.Add(new User { Name = input.Name, LastAction = DateTime.UtcNow });
             _dbContext.SaveChanges();
             /* Create JWT: */
             var token = _authManager.GetToken(new JWTPayload(input.Name));
