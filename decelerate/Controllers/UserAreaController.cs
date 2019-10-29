@@ -58,12 +58,17 @@ namespace decelerate.Controllers
 
         public IActionResult Logout()
         {
+            /* Unregister user: */
+            if (_authManager.IsAuthenticated(Request.Cookies["session"], out User user, out string _))
+            {
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
+            }
             /* Remove JWT cookie: */
             Response.Cookies.Append("session", "", new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(-1)
             });
-            /* TODO: Unregister from backend? */
             /* Redirect to home page: */
             return RedirectToAction("Index", "Home");
         }
