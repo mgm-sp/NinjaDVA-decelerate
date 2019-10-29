@@ -25,7 +25,18 @@ namespace decelerate.Controllers
         public IActionResult Index()
         {
             /* TODO: Add authentication! */
-            return View(new IndexModel { Users = _authManager.GetActiveUsers() });
+            return View(GetData());
+        }
+
+        public IActionResult Poll()
+        {
+            /* TODO: Add authentication! */
+            return new ObjectResult(GetData());
+        }
+
+        private IndexModel GetData()
+        {
+            return new IndexModel { Users = _authManager.GetActiveUsers() };
         }
     }
 }

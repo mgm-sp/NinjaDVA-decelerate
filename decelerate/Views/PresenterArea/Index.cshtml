@@ -14,7 +14,7 @@
                     <th scope="col">Speed Choice</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="users">
                 @foreach (var user in Model.Users)
                 {
                     <tr>
@@ -26,7 +26,14 @@
         </table>
     </div>
 </div>
+<template id="userTemplate">
+    <tr>
+        <th scope="row">[name]</th>
+        <td>[speedChoice]</td>
+    </tr>
+</template>
 
 @section Scripts {
+    <a id="pollUrl" asp-controller="PresenterArea" asp-action="Poll"></a>
     <script src="~/js/presenterarea.js" asp-append-version="true"></script>
 }
