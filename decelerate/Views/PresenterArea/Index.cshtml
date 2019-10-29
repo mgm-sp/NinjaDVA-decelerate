@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "Presenter Area";
     ViewData["HomeController"] = "PresenterArea";
+    /* Calculate slider thresholds: */
+    uint t1 = (100 - Model.DangerThreshold) / 2;
+    uint t2 = (100 - Model.WarningThreshold) / 2;
+    uint t3 = (100 + Model.WarningThreshold) / 2;
+    uint t4 = (100 + Model.DangerThreshold) / 2;
+    int avg = (100 + Model.AverageSpeedChoice) / 2;
 }
 
 <div class="row">
@@ -11,14 +17,9 @@
         <div id="statusDiv" class="alert alert-@Model.Color display-1 text-center">
             <p id="statusText">@Model.Text</p>
         </div>
-        <div class="d-flex">
-            <div class="alert alert-danger" style="width: @((100 - Model.DangerThreshold) / 2)%"></div>
-            <div class="alert alert-warning" style="width: @((Model.DangerThreshold - Model.WarningThreshold) / 2)%"></div>
-            <div class="alert alert-success" style="width: @Model.WarningThreshold%"></div>
-            <div class="alert alert-warning" style="width: @((Model.DangerThreshold - Model.WarningThreshold) / 2)%"></div>
-            <div class="alert alert-danger" style="width: @((100 - Model.DangerThreshold) / 2)%"></div>
+        <div class="w-100 alert alert-secondary" style="background: linear-gradient(90deg, #f8d7da @(t1-2)%, #fff3cd @(t1+2)%, #fff3cd @(t2-2)%, #d4edda @(t2+2)%, #d4edda @(t3-2)%, #fff3cd @(t3+2)%, #fff3cd @(t4-2)%, #f8d7da @(t4+2)%);">
+            <div class="text-right" style="width: @avg%" id="statusSlider">&#11044;</div>
         </div>
-        <input type="range" class="custom-range" id="statusSlider" min="-100" max="100" value="@Model.AverageSpeedChoice" disabled />
         <div class="d-flex justify-content-around">
             <div>&#10229; slower</div>
             <div>faster &#10230;</div>

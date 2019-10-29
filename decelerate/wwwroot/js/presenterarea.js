@@ -33,7 +33,7 @@
                 $('#statusDiv').addClass('alert-' + data.color);
                 $('#statusText').text(data.text);
                 /* Update slider: */
-                $('#statusSlider').val(data.averageSpeedChoice);
+                $('#statusSlider').css('width', parseInt((100 + data.averageSpeedChoice) / 2) + '%');
             },
             timeout: 10000
         });
