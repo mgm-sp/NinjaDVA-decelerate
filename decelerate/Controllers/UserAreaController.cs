@@ -31,8 +31,8 @@ namespace decelerate.Controllers
             /* Check auth: */
             if (!IsAuthenticated(out IActionResult result, out User user)) return result;
             /* Show view: */
-            /* TODO: Get current SpeedChoice from the backend! */
             var model = new IndexModel(user);
+            model.SpeedChoice = user.SpeedChoice ?? 0;
             return View(model);
         }
 
@@ -45,8 +45,11 @@ namespace decelerate.Controllers
             /* Check input: */
             if (ModelState.IsValid)
             {
-                _logger.LogInformation($"User {user.Name} voted with {input.SpeedChoice}.");
-                /* TODO: Forward new SpeedChoice to the backend! */
+                /* Save new speed choice: */
+                user.SpeedChoice = input.SpeedChoice;
+                _dbContext.Users.Update(user);
+                _dbContext.SaveChanges();
+                /* Show success message to the user: */
                 ViewData["ShowModal"] = true;
             }
             /* Show view: */
