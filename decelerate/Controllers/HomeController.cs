@@ -36,6 +36,7 @@ namespace decelerate.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Index(IndexModel input)
         {
             /* Check input: */
