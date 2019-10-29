@@ -71,6 +71,11 @@ namespace decelerate
             return _jwt.Encode(payload);
         }
 
+        public IEnumerable<User> GetActiveUsers()
+        {
+            return _dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
+        }
+
         private readonly JWT<JWTPayload> _jwt;
         private readonly DecelerateDbContext _dbContext;
         private readonly int _userTimeoutSeconds;

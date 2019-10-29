@@ -1,0 +1,32 @@
+﻿@model decelerate.Views.PresenterArea.IndexModel
+@{
+    ViewData["Title"] = "Presenter Area";
+    ViewData["HomeController"] = "PresenterArea";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Welcome to the presenter area!</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Speed Choice</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <th scope="row">@user.Name</th>
+                        <td>@(user.SpeedChoice.HasValue ? user.SpeedChoice.ToString() : "none")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/presenterarea.js" asp-append-version="true"></script>
+}

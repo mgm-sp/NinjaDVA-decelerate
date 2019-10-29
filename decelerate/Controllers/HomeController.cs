@@ -53,7 +53,8 @@ namespace decelerate.Controllers
             /* Add user to database or update it: */
             if (_dbContext.Users.Count(u => u.Name == input.Name) == 0)
             {
-                _dbContext.Add(new User { Name = input.Name, LastAction = DateTime.UtcNow });
+                _dbContext.Add(new User { Name = input.Name, SpeedChoice = null, LastAction = DateTime.UtcNow });
+                /* TODO: Why does the speed choice survive a logout? */
             }
             else
             {
