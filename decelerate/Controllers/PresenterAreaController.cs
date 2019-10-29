@@ -25,37 +25,13 @@ namespace decelerate.Controllers
         public IActionResult Index()
         {
             /* TODO: Add authentication! */
-            return View(GetData());
+            return View(new IndexModel { Users = _authManager.GetActiveUsers() });
         }
 
         public IActionResult Poll()
         {
             /* TODO: Add authentication! */
-            return new ObjectResult(GetData());
-        }
-
-        private IndexModel GetData()
-        {
-            /* Get users: */
-            var users = _authManager.GetActiveUsers();
-            /* Calculate average speed choice: */
-            int sumSpeedChoice = 0;
-            uint cntSpeedChoice = 0;
-            foreach (var user in users)
-            {
-                if (user.SpeedChoice != null)
-                {
-                    sumSpeedChoice += user.SpeedChoice ?? 0;
-                    cntSpeedChoice++;
-                }
-            }
-            var avgSpeedChoice = (cntSpeedChoice != 0) ? ((float)sumSpeedChoice / cntSpeedChoice) : 0;
-            /* Return model: */
-            return new IndexModel
-            {
-                Users = users,
-                AverageSpeedChoice = (int)avgSpeedChoice
-            };
+            return new ObjectResult(new IndexModel { Users = _authManager.GetActiveUsers() });
         }
     }
 }

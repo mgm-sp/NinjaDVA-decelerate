@@ -9,7 +9,32 @@ namespace decelerate.Views.PresenterArea
     public class IndexModel
     {
         public IEnumerable<User> Users { get; set; }
-        public int AverageSpeedChoice { get; set; }
+        public int AverageSpeedChoice
+        {
+            get
+            {
+                /* Calculate sum and count over all users who voted: */
+                int sumSpeedChoice = 0;
+                uint cntSpeedChoice = 0;
+                foreach (var user in Users)
+                {
+                    if (user.SpeedChoice != null)
+                    {
+                        sumSpeedChoice += user.SpeedChoice ?? 0;
+                        cntSpeedChoice++;
+                    }
+                }
+                /* Check if users voted, if not return zero: */
+                if (cntSpeedChoice == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return (int)((float)sumSpeedChoice / cntSpeedChoice);
+                }
+            }
+        }
         public string Color
         {
             get
