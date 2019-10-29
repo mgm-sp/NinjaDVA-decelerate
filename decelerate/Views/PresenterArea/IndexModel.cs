@@ -35,16 +35,30 @@ namespace decelerate.Views.PresenterArea
                 }
             }
         }
+        public uint WarningThreshold
+        {
+            get
+            {
+                return 20;
+            }
+        }
+        public uint DangerThreshold
+        {
+            get
+            {
+                return 50;
+            }
+        }
         public string Color
         {
             get
             {
                 var abs = Math.Abs(AverageSpeedChoice);
-                if (abs > 50)
+                if (abs > DangerThreshold)
                 {
                     return "danger";
                 }
-                else if (abs > 20)
+                else if (abs > WarningThreshold)
                 {
                     return "warning";
                 }
@@ -58,19 +72,19 @@ namespace decelerate.Views.PresenterArea
         {
             get
             {
-                if (AverageSpeedChoice < -50)
+                if (AverageSpeedChoice < -DangerThreshold)
                 {
                     return "talk much slower";
                 }
-                else if (AverageSpeedChoice < -20)
+                else if (AverageSpeedChoice < -WarningThreshold)
                 {
                     return "talk a bit slower";
                 }
-                else if (AverageSpeedChoice > 50)
+                else if (AverageSpeedChoice > DangerThreshold)
                 {
                     return "talk much faster";
                 }
-                else if (AverageSpeedChoice > 20)
+                else if (AverageSpeedChoice > WarningThreshold)
                 {
                     return "talk a bit faster";
                 }

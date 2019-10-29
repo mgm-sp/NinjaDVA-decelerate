@@ -11,19 +11,17 @@
         <div id="statusDiv" class="alert alert-@Model.Color display-1 text-center">
             <p id="statusText">@Model.Text</p>
         </div>
+        <div class="d-flex">
+            <div class="alert alert-danger" style="width: @((100 - Model.DangerThreshold) / 2)%"></div>
+            <div class="alert alert-warning" style="width: @((Model.DangerThreshold - Model.WarningThreshold) / 2)%"></div>
+            <div class="alert alert-success" style="width: @Model.WarningThreshold%"></div>
+            <div class="alert alert-warning" style="width: @((Model.DangerThreshold - Model.WarningThreshold) / 2)%"></div>
+            <div class="alert alert-danger" style="width: @((100 - Model.DangerThreshold) / 2)%"></div>
+        </div>
         <input type="range" class="custom-range" id="statusSlider" min="-100" max="100" value="@Model.AverageSpeedChoice" disabled />
-        <div class="d-flex justify-content-between">
-            <div class="sliderImageDiv">
-                <img src="~/img/turtle.svg" class="sliderImage" alt="much slower" title="much slower" />
-            </div>
+        <div class="d-flex justify-content-around">
             <div>&#10229; slower</div>
-            <div class="sliderImageDiv">
-                <img src="~/img/checkmark.svg" class="sliderImage" alt="perfect speed" title="perfect speed" />
-            </div>
             <div>faster &#10230;</div>
-            <div class="sliderImageDiv">
-                <img src="~/img/rabbit.svg" class="sliderImage" alt="much faster" title="much faster" />
-            </div>
         </div>
     </div>
 </div>
