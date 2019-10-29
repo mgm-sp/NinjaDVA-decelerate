@@ -36,7 +36,26 @@ namespace decelerate.Controllers
 
         private IndexModel GetData()
         {
-            return new IndexModel { Users = _authManager.GetActiveUsers() };
+            /* Get users: */
+            var users = _authManager.GetActiveUsers();
+            /* Calculate average speed choice: */
+            int sumSpeedChoice = 0;
+            uint cntSpeedChoice = 0;
+            foreach (var user in users)
+            {
+                if (user.SpeedChoice != null)
+                {
+                    sumSpeedChoice += user.SpeedChoice ?? 0;
+                    cntSpeedChoice++;
+                }
+            }
+            var avgSpeedChoice = (cntSpeedChoice != 0) ? ((float)sumSpeedChoice / cntSpeedChoice) : 0;
+            /* Return model: */
+            return new IndexModel
+            {
+                Users = users,
+                AverageSpeedChoice = (int)avgSpeedChoice
+            };
         }
     }
 }
