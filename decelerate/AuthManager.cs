@@ -22,7 +22,7 @@ namespace decelerate
                 throw new ArgumentException("Invalid JwtKey configured");
             }
             /* Create JWT instance: */
-            _jwt = new JWT<JWTPayload>(key);
+            _jwt = new JWT<User>(key);
             /* Get user timeout: */
             _userTimeoutSeconds = config.GetValue<int>("UserTimeoutSeconds");
             if (_userTimeoutSeconds <= 0)
@@ -42,21 +42,18 @@ namespace decelerate
         public bool IsAuthenticated(string sessionCookie, DecelerateDbContext dbContext, out User user, out string errorMessage)
         {
             /* Parse JWT token: */
-            var jwtPayload = _jwt.Decode(sessionCookie, out errorMessage);
+            user = _jwt.Decode(sessionCookie, out errorMessage);
             /* Check payload: */
-            if (jwtPayload == null)
+            if (user == null)
             {
-                user = null;
                 return false;
             }
             /* Check name and timeout against the database: */
-            if (!IsUserActive(jwtPayload.name, dbContext))
+            if (!IsUserActive(user.Name, dbContext))
             {
                 user = null;
                 return false;
             }
-            /* Get the user: */
-            user = dbContext.Users.First(u => u.Name == jwtPayload.name);
             /* Update last action: */
             user.LastAction = DateTime.UtcNow;
             dbContext.Users.Update(user);
@@ -65,9 +62,9 @@ namespace decelerate
             return true;
         }
 
-        public string GetToken(JWTPayload payload)
+        public string GetToken(User user)
         {
-            return _jwt.Encode(payload);
+            return _jwt.Encode(user);
         }
 
         public IEnumerable<User> GetActiveUsers(DecelerateDbContext dbContext)
@@ -75,7 +72,7 @@ namespace decelerate
             return dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
         }
 
-        private readonly JWT<JWTPayload> _jwt;
+        private readonly JWT<User> _jwt;
         private readonly int _userTimeoutSeconds;
     }
 }

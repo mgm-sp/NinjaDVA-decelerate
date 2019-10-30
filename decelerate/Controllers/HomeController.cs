@@ -50,21 +50,20 @@ namespace decelerate.Controllers
                 ViewData["ErrorMessage"] = "Sorry, this name is already taken.";
                 return View(input);
             }
-            /* Add user to database or update it: */
+            /* Add user to database if it doesn't exist: */
             if (_dbContext.Users.Count(u => u.Name == input.Name) == 0)
             {
-                _dbContext.Add(new User { Name = input.Name, SpeedChoice = null, LastAction = DateTime.UtcNow });
+                _dbContext.Add(new User { Name = input.Name });
+                _dbContext.SaveChanges();
             }
-            else
-            {
-                var user = _dbContext.Users.First(u => u.Name == input.Name);
-                user.SpeedChoice = null;
-                user.LastAction = DateTime.UtcNow;
-                _dbContext.Update(user);
-            }
+            /* Update user info: */
+            var user = _dbContext.Users.First(u => u.Name == input.Name);
+            user.SpeedChoice = null;
+            user.LastAction = DateTime.UtcNow;
+            _dbContext.Update(user);
             _dbContext.SaveChanges();
             /* Create JWT: */
-            var token = _authManager.GetToken(new JWTPayload(input.Name));
+            var token = _authManager.GetToken(user);
             /* Set JWT cookie: */
             Response.Cookies.Append("session", token, new CookieOptions
             {
