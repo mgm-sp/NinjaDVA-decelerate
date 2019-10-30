@@ -16,15 +16,16 @@
                 /* Add new user entries: */
                 data.users.forEach(function (entry) {
                     /* Get template content: */
-                    var html = $('#userTemplate').html();
+                    var templateId = (entry.transformedSpeedChoice === null) ? '#userTemplateNotVoted' : '#userTemplateVoted';
+                    var html = $(templateId).html();
                     /* Replace placeholders: */
                     html = html.replace('[name]', entry.name);
-                    if (entry.speedChoice === null) {
-                        entry.speedChoice = 'none';
-                    }
-                    html = html.replace('[speedChoice]', entry.speedChoice);
                     /* Create new element: */
                     var tr = $(html);
+                    /* Add width: */
+                    if (entry.transformedSpeedChoice !== null) {
+                        tr.find('.innerUserSlider').css('width', entry.transformedSpeedChoice + '%');
+                    }
                     /* Append it: */
                     $('#users').append(tr);
                 });

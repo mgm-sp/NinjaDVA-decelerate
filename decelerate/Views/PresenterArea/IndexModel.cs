@@ -35,6 +35,13 @@ namespace decelerate.Views.PresenterArea
                 }
             }
         }
+        public uint TransformedAverageSpeedChoice
+        {
+            get
+            {
+                return (uint)((100 + AverageSpeedChoice) / 2.0);
+            }
+        }
         public uint WarningThreshold
         {
             get
