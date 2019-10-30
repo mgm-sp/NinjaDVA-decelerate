@@ -17,14 +17,18 @@ namespace decelerate.Utils.JWT
         {
             var keyBytes = Encoding.UTF8.GetBytes(key);
             hmac = new HMACSHA256(keyBytes);
+            _settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
         }
         public string Encode(T payload)
         {
             /* Create and encode header: */
             var header = new JWTHeader("JWT", "HS256");
-            var headerEncoded = EncodeObject(header);
+            var headerEncoded = EncodeObject(header, null);
             /* Encode payload: */
-            var payloadEncoded = EncodeObject(payload);
+            var payloadEncoded = EncodeObject(payload, _settings);
             /* Create signature: */
             var signatureEncoded = CreateSignature(headerEncoded, payloadEncoded);
             /* Return everything: */
@@ -113,7 +117,7 @@ namespace decelerate.Utils.JWT
             T payload;
             try
             {
-                payload = (T)JsonConvert.DeserializeObject(jsonParts[1], typeof(T));
+                payload = (T)JsonConvert.DeserializeObject(jsonParts[1], _settings);
             }
             catch (JsonReaderException)
             {
@@ -125,10 +129,10 @@ namespace decelerate.Utils.JWT
             return payload;
         }
 
-        private string EncodeObject(Object obj)
+        private string EncodeObject(Object obj, JsonSerializerSettings settings)
         {
             /* JSON-encode: */
-            var json = JsonConvert.SerializeObject(obj);
+            var json = JsonConvert.SerializeObject(obj, settings);
             /* Convert into raw bytes: */
             var bytes = Encoding.UTF8.GetBytes(json);
             /* base64-encode: */
@@ -144,5 +148,6 @@ namespace decelerate.Utils.JWT
         }
 
         private readonly HMACSHA256 hmac;
+        private readonly JsonSerializerSettings _settings;
     }
 }
