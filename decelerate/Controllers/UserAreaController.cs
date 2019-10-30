@@ -60,7 +60,7 @@ namespace decelerate.Controllers
         public IActionResult Logout()
         {
             /* Unregister user: */
-            if (_authManager.IsAuthenticated(Request.Cookies["session"], out User user, out string _))
+            if (_authManager.IsAuthenticated(Request.Cookies["session"], _dbContext, out User user, out string _))
             {
                 _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
@@ -76,7 +76,7 @@ namespace decelerate.Controllers
 
         private bool IsAuthenticated(out IActionResult result, out User user)
         {
-            if (_authManager.IsAuthenticated(Request.Cookies["session"], out user, out string errorMessage))
+            if (_authManager.IsAuthenticated(Request.Cookies["session"], _dbContext, out user, out string errorMessage))
             {
                 result = null;
                 return true;

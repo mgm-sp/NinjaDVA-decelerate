@@ -27,7 +27,7 @@ namespace decelerate.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            if (_authManager.IsAuthenticated(Request.Cookies["Session"], out User _, out string _))
+            if (_authManager.IsAuthenticated(Request.Cookies["Session"], _dbContext, out User _, out string _))
             {
                 /* User is authenticated, redirect to user area: */
                 return RedirectToAction("Index", "UserArea");
@@ -45,7 +45,7 @@ namespace decelerate.Controllers
                 return View(input);
             }
             /* Check if user already exists and is active: */
-            if (_authManager.IsUserActive(input.Name))
+            if (_authManager.IsUserActive(input.Name, _dbContext))
             {
                 ViewData["ErrorMessage"] = "Sorry, this name is already taken.";
                 return View(input);

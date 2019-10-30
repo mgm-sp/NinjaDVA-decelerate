@@ -25,13 +25,13 @@ namespace decelerate.Controllers
         public IActionResult Index()
         {
             /* TODO: Add authentication! */
-            return View(new IndexModel { Users = _authManager.GetActiveUsers() });
+            return View(new IndexModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult Poll()
         {
             /* TODO: Add authentication! */
-            return new ObjectResult(new IndexModel { Users = _authManager.GetActiveUsers() });
+            return new ObjectResult(new IndexModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
     }
 }

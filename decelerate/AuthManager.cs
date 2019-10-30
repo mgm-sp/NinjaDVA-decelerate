@@ -12,9 +12,8 @@ namespace decelerate
 {
     public class AuthManager
     {
-        public AuthManager(IConfiguration config, DecelerateDbContext dbContext)
+        public AuthManager(IConfiguration config)
         {
-            _dbContext = dbContext;
             /* Get JWT key: */
             var key = config.GetValue<string>("JwtKey");
             if (key.Length != 32)
@@ -33,14 +32,14 @@ namespace decelerate
             }
         }
 
-        public bool IsUserActive(string name)
+        public bool IsUserActive(string name, DecelerateDbContext dbContext)
         {
-            var count = _dbContext.Users.Count(u => (u.Name == name) &&
+            var count = dbContext.Users.Count(u => (u.Name == name) &&
                 (u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow));
             return (count != 0);
         }
 
-        public bool IsAuthenticated(string sessionCookie, out User user, out string errorMessage)
+        public bool IsAuthenticated(string sessionCookie, DecelerateDbContext dbContext, out User user, out string errorMessage)
         {
             /* Parse JWT token: */
             var jwtPayload = _jwt.Decode(sessionCookie, out errorMessage);
@@ -51,17 +50,17 @@ namespace decelerate
                 return false;
             }
             /* Check name and timeout against the database: */
-            if (!IsUserActive(jwtPayload.name))
+            if (!IsUserActive(jwtPayload.name, dbContext))
             {
                 user = null;
                 return false;
             }
             /* Get the user: */
-            user = _dbContext.Users.First(u => u.Name == jwtPayload.name);
+            user = dbContext.Users.First(u => u.Name == jwtPayload.name);
             /* Update last action: */
             user.LastAction = DateTime.UtcNow;
-            _dbContext.Users.Update(user);
-            _dbContext.SaveChanges();
+            dbContext.Users.Update(user);
+            dbContext.SaveChanges();
             /* Return success: */
             return true;
         }
@@ -71,13 +70,12 @@ namespace decelerate
             return _jwt.Encode(payload);
         }
 
-        public IEnumerable<User> GetActiveUsers()
+        public IEnumerable<User> GetActiveUsers(DecelerateDbContext dbContext)
         {
-            return _dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
+            return dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
         }
 
         private readonly JWT<JWTPayload> _jwt;
-        private readonly DecelerateDbContext _dbContext;
         private readonly int _userTimeoutSeconds;
     }
 }
