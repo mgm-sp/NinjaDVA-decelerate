@@ -70,8 +70,9 @@ class BotThread(threading.Thread):
 
 
 threads = []
+prefix = random.randrange(10000)
 for i in range(numberOfUsers):
-    thread = BotThread(name="bot%d" % i)
+    thread = BotThread(name="bot%d-%d" % (prefix, i))
     thread.start()
     threads.append(thread)
 
