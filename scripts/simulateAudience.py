@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import sys, time, urllib.parse, threading, random, ctypes
+import sys, time, urllib.parse, threading, random, ctypes, os.path
 import requests
 
 if len(sys.argv) < 3:
@@ -69,10 +69,19 @@ class BotThread(threading.Thread):
                     time.sleep(1)
 
 
+def getName():
+    # Waterman's Reservoir Algorithm
+    # see https://stackoverflow.com/questions/3540288/how-do-i-read-a-random-line-from-one-file-in-python#tab-top
+    with open(os.path.join(os.path.dirname(__file__), 'names.txt'), 'r') as f:
+        line = next(f)
+        for num, nline in enumerate(f, 2):
+            if random.randrange(num): continue
+            line = nline
+    return line.strip()
+
 threads = []
-prefix = random.randrange(10000)
 for i in range(numberOfUsers):
-    thread = BotThread(name="bot%d-%d" % (prefix, i))
+    thread = BotThread(name=getName())
     thread.start()
     threads.append(thread)
 
