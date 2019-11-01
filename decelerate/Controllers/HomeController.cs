@@ -13,13 +13,11 @@ namespace decelerate.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly AuthManager _authManager;
         private readonly DecelerateDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger, AuthManager authManager, DecelerateDbContext dbContext)
+        public HomeController(AuthManager authManager, DecelerateDbContext dbContext)
         {
-            _logger = logger;
             _authManager = authManager;
             _dbContext = dbContext;
         }

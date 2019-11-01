@@ -40,7 +40,9 @@ namespace decelerate.Models
             }
         }
 
+#pragma warning disable CS1998 // missing await operators
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+#pragma warning restore CS1998 // missing await operators
         {
             /* Check if authorization header exists: */
             if (!Request.Headers.ContainsKey("Authorization"))

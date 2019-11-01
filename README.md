@@ -15,3 +15,4 @@ Additionally, it serves as a demo application with vulnerabilities.
 ## Todo List
 * add WebSocket vulnerability, maybe to get average and still poll the individual users
 * implement time decay for the votes?
+* find a nice payload for the deserialization vulnerability

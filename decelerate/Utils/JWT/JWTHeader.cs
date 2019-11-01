@@ -12,7 +12,10 @@ namespace decelerate.Utils.JWT
             this.typ = typ;
             this.alg = alg;
         }
+
+#pragma warning disable IDE1006 // naming style
         public string typ { get; set; }
         public string alg { get; set; }
+#pragma warning restore IDE1006 // naming style
     }
 }
