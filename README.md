@@ -11,8 +11,9 @@ Additionally, it serves as a demo application with vulnerabilities.
 ## Vulnerabilities
 * JSON Web Tokens with signing algorithm `none` get accepted
 * JWT Payload contains type information which is not validated before deserializing it
+* Websocket for presenter interface is accessible without authentication
 
 ## Todo List
-* add WebSocket vulnerability, maybe to get average and still poll the individual users
+* add authentication to Websocket, but allow cross-site requests (probable needs cookie auth)
 * implement time decay for the votes?
 * find a nice payload for the deserialization vulnerability
