@@ -22,7 +22,7 @@ namespace decelerate
                 throw new ArgumentException("Invalid JwtKey configured");
             }
             /* Create JWT instance: */
-            _jwt = new JWT<User>(key);
+            _jwt = new JWT<User>(key, JWTAlgorithm.HS256);
             /* Get user timeout: */
             _userTimeoutSeconds = config.GetValue<int>("UserTimeoutSeconds");
             if (_userTimeoutSeconds <= 0)

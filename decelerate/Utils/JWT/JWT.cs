@@ -5,18 +5,25 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.WebUtilities;
 
-/*
- * Let's ignore all available libraries and implement JWT on our own because that's always
- * a good idea with crypto stuff, right?
- */
 namespace decelerate.Utils.JWT
 {
     public class JWT<T> where T: class
     {
-        public JWT(string key)
+        public JWT(string key, JWTAlgorithm algorithm)
         {
-            var keyBytes = Encoding.UTF8.GetBytes(key);
-            hmac = new HMACSHA256(keyBytes);
+            _algorithm = algorithm;
+
+            /* Create HMAC instance: */
+            switch (_algorithm)
+            {
+                case JWTAlgorithm.HS256:
+                    var keyBytes = Encoding.UTF8.GetBytes(key);
+                    _hmac = new HMACSHA256(keyBytes);
+                    break;
+                /* Additional algorithms will be implemented here in future versions. */
+            }
+
+            /* Create serializer settings: */
             _settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All
@@ -25,12 +32,12 @@ namespace decelerate.Utils.JWT
         public string Encode(T payload)
         {
             /* Create and encode header: */
-            var header = new JWTHeader("JWT", "HS256");
+            var header = new JWTHeader("JWT", _algorithm.GetString());
             var headerEncoded = EncodeObject(header, null);
             /* Encode payload: */
             var payloadEncoded = EncodeObject(payload, _settings);
             /* Create signature: */
-            var signatureEncoded = CreateSignature(headerEncoded, payloadEncoded);
+            var signatureEncoded = (_algorithm == JWTAlgorithm.None) ? "" : CreateSignature(headerEncoded, payloadEncoded);
             /* Return everything: */
             return headerEncoded + "." + payloadEncoded + "." + signatureEncoded;
         }
@@ -97,21 +104,28 @@ namespace decelerate.Utils.JWT
                 errorMessage = "invalid JWT type";
                 return null;
             }
-            if (header.alg != "HS256" && header.alg != "none")
-            {
-                /* These two algorithms are mandatory, so of course we only implemented them, but very carefully. */
-                errorMessage = "invalid JWT algorithm";
-                return null;
-            }
             /* Check signature: */
-            if (header.alg == "HS256")
+            switch (header.alg)
             {
-                var correctSignature = CreateSignature(tokenParts[0], tokenParts[1]);
-                if (correctSignature != tokenParts[2])
-                {
-                    errorMessage = "invalid signature";
+                case "HS256":
+                    /* SHA256 HMAC */
+                    var correctSignature = CreateSignature(tokenParts[0], tokenParts[1]);
+                    if (correctSignature != tokenParts[2])
+                    {
+                        errorMessage = "invalid signature";
+                        return null;
+                    }
+                    break;
+                case "none":
+                    /* no signature */
+                    break;
+                /* ^- These two algorithms are mandatory.
+                 * Additional ones will be implemented here in future versions.
+                 */
+                default:
+                    /* unknown algorithm */
+                    errorMessage = "unknown JWT signature algorithm";
                     return null;
-                }
             }
             /* Finally, JSON-decode the payload: */
             T payload;
@@ -143,11 +157,12 @@ namespace decelerate.Utils.JWT
         {
             var stringToSign = headerEncoded + "." + payloadEncoded;
             var bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
-            var signature = hmac.ComputeHash(bytesToSign);
+            var signature = _hmac.ComputeHash(bytesToSign);
             return WebEncoders.Base64UrlEncode(signature);
         }
 
-        private readonly HMACSHA256 hmac;
+        private readonly JWTAlgorithm _algorithm;
+        private readonly HMACSHA256 _hmac;
         private readonly JsonSerializerSettings _settings;
     }
 }

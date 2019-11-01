@@ -14,4 +14,4 @@ Additionally, it serves as a demo application with vulnerabilities.
 
 ## Todo List
 * add WebSocket vulnerability, maybe to get average and still poll the individual users
-* make JWT vulnerability a bit less obvious, maybe using switch-case for the algorithms
+* implement time decay for the votes?
