@@ -42,18 +42,21 @@ namespace decelerate
         public bool IsAuthenticated(string sessionCookie, DecelerateDbContext dbContext, out User user, out string errorMessage)
         {
             /* Parse JWT token: */
-            user = _jwt.Decode(sessionCookie, out errorMessage);
+            var jwtUser = _jwt.Decode(sessionCookie, out errorMessage);
             /* Check payload: */
-            if (user == null)
-            {
-                return false;
-            }
-            /* Check name and timeout against the database: */
-            if (!IsUserActive(user.Name, dbContext))
+            if (jwtUser == null)
             {
                 user = null;
                 return false;
             }
+            /* Check name and timeout against the database: */
+            if (!IsUserActive(jwtUser.Name, dbContext))
+            {
+                user = null;
+                return false;
+            }
+            /* Get updated user information from the database: */
+            user = dbContext.Users.First(u => u.Name == jwtUser.Name);
             /* Update last action: */
             user.LastAction = DateTime.UtcNow;
             dbContext.Users.Update(user);
