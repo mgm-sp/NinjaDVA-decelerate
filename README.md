@@ -14,6 +14,6 @@ Additionally, it serves as a demo application with vulnerabilities.
 * Websocket for presenter interface is accessible without authentication
 
 ## Todo List
-* add authentication to Websocket, but allow cross-site requests (probable needs cookie auth)
+* add authentication to Websocket, but allow cross-site requests (probably needs cookie auth)
 * implement time decay for the votes?
 * find a nice payload for the deserialization vulnerability
