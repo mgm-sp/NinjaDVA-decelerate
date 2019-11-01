@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using decelerate.Views.Home;
 using decelerate.Models;
+using decelerate.Hubs;
 using decelerate.Utils.JWT;
 
 namespace decelerate.Controllers
@@ -15,11 +18,13 @@ namespace decelerate.Controllers
     {
         private readonly AuthManager _authManager;
         private readonly DecelerateDbContext _dbContext;
+        private readonly IHubContext<PresenterHub> _hubContext;
 
-        public HomeController(AuthManager authManager, DecelerateDbContext dbContext)
+        public HomeController(AuthManager authManager, DecelerateDbContext dbContext, IHubContext<PresenterHub> hubContext)
         {
             _authManager = authManager;
             _dbContext = dbContext;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -35,7 +40,7 @@ namespace decelerate.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(IndexModel input)
+        public async Task<IActionResult> Index(IndexModel input)
         {
             /* Check input: */
             if (!ModelState.IsValid)
@@ -67,6 +72,8 @@ namespace decelerate.Controllers
             {
                 HttpOnly = true
             });
+            /* Notify presenter about the login: */
+            await _hubContext.Clients.All.SendAsync("Notify", user.Name, "login");
             /* Return response: */
             return RedirectToAction("Index", "UserArea");
         }

@@ -1,11 +1,16 @@
-﻿(function () {
+﻿"use strict";
+
+(function () {
     /* Poll function: */
-    function poll() {
+    function poll(scheduleNextPoll) {
         $.ajax($('#pollUrl').attr('href'), {
             cache: false,
             dataType: 'json',
             complete: function (jqXHR, textStatus) {
-                window.setTimeout(poll, 5000);
+                /* Schedule the next call of poll(): */
+                if (scheduleNextPoll) {
+                    window.setTimeout(poll, 5000, true);
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR, textStatus, errorThrown);
@@ -39,8 +44,27 @@
             timeout: 10000
         });
     }
-    /* Register poll function: */
-    window.addEventListener('load', function () {
-        window.setTimeout(poll, 5000);
-    }, false);
+
+    /* SignalR hub: */
+    var hub = new signalR.HubConnectionBuilder().withUrl($('#hubUrl').attr('href')).build();
+    hub.on('Notify', function (user, type, arg) {
+        console.log(user, type, arg);
+        /* Something changed, poll new data (but only once): */
+        poll(false);
+        /* TODO: Remove polling and only use the data provided by the notification. */
+    });
+    hub.onclose(function (err) {
+        if (err !== undefined) {
+            /* Fall back to polling at a regular interval: */
+            console.log("SignalR error, falling back to regular polling.")
+            poll(true);
+            return console.error(err.toString());
+        }
+    })
+    hub.start().catch(function (err) {
+        /* Fall back to polling at a regular interval: */
+        console.log("SignalR error, falling back to regular polling.")
+        poll(true);
+        return console.error(err.toString());
+    });
 })();
