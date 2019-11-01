@@ -15,4 +15,3 @@ Additionally, it serves as a demo application with vulnerabilities.
 
 ## Todo List
 * implement time decay for the votes?
-* find a nice payload for the deserialization vulnerability
