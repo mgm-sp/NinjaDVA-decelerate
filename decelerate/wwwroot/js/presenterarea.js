@@ -39,7 +39,7 @@
                 $('#statusDiv').addClass('alert-' + data.color);
                 $('#statusText').text(data.text);
                 /* Update slider: */
-                $('#statusSlider').css('width', parseInt((100 + data.averageSpeedChoice) / 2) + '%');
+                $('#statusSlider').css('width', data.transformedAverageSpeedChoice + '%');
             },
             timeout: 10000
         });
