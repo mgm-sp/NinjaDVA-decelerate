@@ -13,7 +13,7 @@ Additionally, it serves as a demo application with vulnerabilities.
 * JWT Payload contains type information which is not validated before deserializing it
 * WebSocket for presenter interface is accessible from arbitrary origins
 
-The `attacker` directory contains instructions on how these vulnerabilities can be exploited.
+The [attacks](attacks) directory contains instructions on how these vulnerabilities can be exploited.
 
 ## Configuration
 Configuration is done in `decelerate/appsettings.json`.
