@@ -34,5 +34,24 @@ Configuration is done in `decelerate/appsettings.json`.
     but is not protected from cross-site requests) and can basically do anything using the deserialization
     vulnerability
 
+## Presenter Interface
+The presenter interface is available at `http://your-hostname:port/PresenterArea`. 
+After you entered the credentials configured in `decelerate/appsettings.json`, you will see the following page:
+
+![Presenter Interface](screenshots/presenterarea.png)
+
+The large message box gives advice on your talking speed with one of these messages:
+* talk much slower (red)
+* talk a bit slower (yellow)
+* keep your speed (green)
+* talk a bit faster (yellow)
+* talk much faster (red)
+
+Which message is displayed depends on the average vote of all the users, which is also shown using the dot inside
+the large red/yellow/green box below.
+At the bottom of the page is a table which lists all the users and their individual votes.
+Using the links at the top of the page you can reset all votes or delete all users.
+The page is updated automatically each time a user logs in, votes or logs out.
+
 ## Todo List
 * implement time decay for the votes?
