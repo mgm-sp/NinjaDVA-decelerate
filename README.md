@@ -59,6 +59,3 @@ the large red/yellow/green box below.
 At the bottom of the page is a table which lists all the users and their individual votes.
 Using the links at the top of the page you can reset all votes or delete all users.
 The page is updated automatically each time a user logs in, votes or logs out.
-
-## Todo List
-* implement time decay for the votes?
