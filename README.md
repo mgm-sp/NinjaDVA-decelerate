@@ -48,11 +48,11 @@ After you entered the credentials configured in `decelerate/appsettings.json`, y
 ![Presenter area](screenshots/presenterarea.png)
 
 The large message box gives advice on your talking speed with one of these messages:
-* talk much slower (red)
-* talk a bit slower (yellow)
-* keep your speed (green)
-* talk a bit faster (yellow)
-* talk much faster (red)
+* “talk much slower” (red)
+* “talk a bit slower” (yellow)
+* “keep your speed” (green)
+* “talk a bit faster” (yellow)
+* “talk much faster” (red)
 
 Which message is displayed depends on the average vote of all the users, which is also shown using the dot inside
 the large red/yellow/green box below.
