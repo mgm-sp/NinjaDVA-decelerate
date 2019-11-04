@@ -67,4 +67,9 @@
         poll(true);
         return console.error(err.toString());
     });
+
+    /* Register confirm windows: */
+    $('.confirm').click(function () {
+        return confirm($(this).attr('data'));
+    });
 })();

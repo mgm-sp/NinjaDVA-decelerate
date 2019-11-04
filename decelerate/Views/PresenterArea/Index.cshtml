@@ -77,6 +77,11 @@
     </tr>
 </template>
 
+@section Navigation {
+    <li class="nav-item">
+        <a class="nav-link text-dark confirm" asp-area="" asp-controller="PresenterArea" asp-action="ClearVotes" data="Do you really want to delete all votes?">Clear votes</a>
+    </li>
+}
 @section Scripts {
     <a id="pollUrl" asp-controller="PresenterArea" asp-action="Poll"></a>
     <a id="hubUrl" asp-controller="PresenterArea" asp-action="Hub"></a>

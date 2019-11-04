@@ -33,5 +33,17 @@ namespace decelerate.Controllers
         {
             return new ObjectResult(new IndexModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
+
+        public IActionResult ClearVotes()
+        {
+            /* Set all votes to NULL: */
+            foreach (var user in _dbContext.Users)
+            {
+                user.SpeedChoice = null;
+            }
+            _dbContext.SaveChanges();
+            /* Redirect back: */
+            return RedirectToAction("Index", "PresenterArea");
+        }
     }
 }
