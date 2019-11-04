@@ -45,5 +45,14 @@ namespace decelerate.Controllers
             /* Redirect back: */
             return RedirectToAction("Index", "PresenterArea");
         }
+
+        public IActionResult ClearUsers()
+        {
+            /* Delete all users: */
+            _dbContext.RemoveRange(_dbContext.Users);
+            _dbContext.SaveChanges();
+            /* Redirect back: */
+            return RedirectToAction("Index", "PresenterArea");
+        }
     }
 }

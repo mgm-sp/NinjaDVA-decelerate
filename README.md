@@ -28,12 +28,11 @@ Configuration is done in `decelerate/appsettings.json`.
   * after automatic logout, the vote of the user is removed and the username is available again
 * **Presenter ⇒ Username/Password**
   * username and password for the presenter area
-  * you should change the password to prevent users from easily getting access to the votes and the
-    "clear votes" function
+  * you should **change the password** to prevent users from easily getting access to the votes and the
+    “clear votes” / “clear users” functions
   * however, note that an attacker might get access to the votes via the WebSocket (which requires authentication
     but is not protected from cross-site requests) and can basically do anything using the deserialization
     vulnerability
 
 ## Todo List
 * implement time decay for the votes?
-* add function to clear users
