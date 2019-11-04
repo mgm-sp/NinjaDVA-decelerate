@@ -24,6 +24,17 @@ Configuration is done in `decelerate/appsettings.json`.
 * **Presenter ⇒ Username/Password**
   * username and password for the presenter area
 
+## Docker Container
+To create the docker container, change into the `decelerate` directory and execute
+```
+docker build -t decelerate .
+```
+
+Afterwards, to start it on port `8080`, execute
+```
+docker run -p 8080:80 decelerate
+```
+
 ## User Interface
 When you visit the index page, you will see the following:
 
