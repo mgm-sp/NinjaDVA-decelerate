@@ -34,11 +34,28 @@ Configuration is done in `decelerate/appsettings.json`.
     but is not protected from cross-site requests) and can basically do anything using the deserialization
     vulnerability
 
+## User Interface
+When you visit the index page, you will see the following:
+
+![Index page](screenshots/homepage.png)
+
+To use the application, you need to enter a name and press *Start*.
+This reserves the entered name for you and logs you in.
+However, after a certain time of inactivity or after you logged out, the name will be available again.
+When you entered a name that isn't already reserved, you will see the following screen:
+
+![User area](screenshots/userarea.png)
+
+To vote, simply click on a position on the slider or drag it, more to the left if you want the talk to be slower
+or more to the right if you want it to be faster.
+You can logout using the link at the top of the page, but note that this will **remove your vote** and will make
+your name available to use by anyone.
+
 ## Presenter Interface
 The presenter interface is available at `http://your-hostname:port/PresenterArea`. 
 After you entered the credentials configured in `decelerate/appsettings.json`, you will see the following page:
 
-![Presenter Interface](screenshots/presenterarea.png)
+![Presenter area](screenshots/presenterarea.png)
 
 The large message box gives advice on your talking speed with one of these messages:
 * talk much slower (red)
