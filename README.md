@@ -35,6 +35,33 @@ Afterwards, to start it on port `8080`, execute
 docker run -p 8080:80 decelerate
 ```
 
+## NinjaDVA Integration
+1. Clone the NinjaDVA repository and change into the created directory:
+```shell
+git clone https://github.com/mgm-sp/NinjaDVA.git
+cd NinjaDVA
+```
+2. Clone the decelerate repository into a directory named `decelerate_vm`:
+```shell
+git clone git@spcode.mgm-edv.de:NinjaDVA/decelerate.git decelerate_vm
+```
+3. Configure decelerate (change *JwtKey* and *Presenter ⇒ Password*):
+```shell
+vim decelerate_vm/decelerate/appsettings.json
+```
+4. Start NinjaDVA as usual:
+```shell
+./ninjadva up
+```
+5. The application will be available at `decelerate.your-domain.tld`.
+
+To apply changes made to the application or the configuration, you need to trigger provisioning manually after
+you started the VM:
+```shell
+cd decelerate_vm
+vagrant provision
+```
+
 ## User Interface
 When you visit the index page, you will see the following:
 

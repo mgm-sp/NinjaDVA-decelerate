@@ -1,5 +1,6 @@
 *.user
 *.db
 .vs/
+.vagrant/
 [Bb]in/
 [Oo]bj/
