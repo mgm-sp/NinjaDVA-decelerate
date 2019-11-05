@@ -43,23 +43,44 @@ namespace decelerate.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexModel input)
+        public IActionResult Index(IndexModel input)
         {
             /* Check auth: */
             if (!IsAuthenticated(out IActionResult result, out User user)) return result;
             input.User = user;
-            /* Check input: */
-            if (ModelState.IsValid)
+            /* Check input and register the vote: */
+            CheckAndVote(input, user);
+            /* Show view: */
+            return View(input);
+        }
+
+        [HttpGet]
+        public IActionResult Widget()
+        {
+            /* Check auth: */
+            if (IsAuthenticated(out IActionResult _, out User user))
             {
-                /* Save new speed choice: */
-                user.SpeedChoice = input.SpeedChoice;
-                _dbContext.Users.Update(user);
-                _dbContext.SaveChanges();
-                /* Show success message to the user: */
-                ViewData["ShowModal"] = true;
-                /* Notify presenter about the new vote: */
-                await _hubContext.Clients.All.SendAsync("Notify", user.Name, "vote", input.SpeedChoice);
+                /* Show view for logged in users (with model): */
+                var model = new IndexModel { User = user };
+                model.SpeedChoice = user.SpeedChoice ?? 0;
+                return View(model);
             }
+            else
+            {
+                /* Show view for logged out users (without model): */
+                return View(null);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Widget(IndexModel input)
+        {
+            /* Check auth: */
+            if (!IsAuthenticated(out IActionResult result, out User user)) return View(null);
+            input.User = user;
+            /* Check input and register the vote: */
+            CheckAndVote(input, user);
             /* Show view: */
             return View(input);
         }
@@ -95,6 +116,21 @@ namespace decelerate.Controllers
                 result = RedirectToAction("Index", "Home");
                 _logger.LogWarning($"JWT Error: {errorMessage}");
                 return false;
+            }
+        }
+
+        private async void CheckAndVote(IndexModel input, User user)
+        {
+            if (ModelState.IsValid)
+            {
+                /* Save new speed choice: */
+                user.SpeedChoice = input.SpeedChoice;
+                _dbContext.Users.Update(user);
+                _dbContext.SaveChanges();
+                /* Show success message to the user: */
+                ViewData["ShowModal"] = true;
+                /* Notify presenter about the new vote: */
+                await _hubContext.Clients.All.SendAsync("Notify", user.Name, "vote", input.SpeedChoice);
             }
         }
     }
