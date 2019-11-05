@@ -53,7 +53,7 @@ vim decelerate_vm/decelerate/appsettings.json
 ```shell
 ./ninjadva up
 ```
-5. The application will be available at `decelerate.your-domain.tld`.
+5. The application is now available at `decelerate.your-domain.tld`.
 
 To apply changes made to the application or the configuration, you need to trigger provisioning manually after
 you started the VM:
