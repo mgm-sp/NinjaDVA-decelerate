@@ -12,3 +12,11 @@ python simulateAudience.py http://localhost:59901/ 10
 ```
 if the application runs at `http://localhost:59901/` and you want to have ten users.
 Terminate with Ctrl+C.
+
+## NinjaDVA\_tunnel.sh
+Tunnels into the internal NinjaDVA network using sshuttle.
+Execute when you're in the NinjaDVA main directory.
+
+## NinjaDVA\_getIPs.sh
+Lists the IP addresses for all VMs.
+Execute when you're in the NinjaDVA main directory.
