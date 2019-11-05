@@ -21,29 +21,17 @@ Vagrant.configure("2") do |config|
   # disable standard synced folder
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  # install docker
-  config.vm.provision "shell", inline: <<-END
-    apt-get -y update
-    apt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-    echo deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable > /etc/apt/sources.list.d/docker.list
-    apt-get -y update
-    apt-get -y install docker-ce
-  END
-
   # copy sources to the guest system
   config.vm.provision "file", source: "decelerate", destination: "decelerate"
 
-  # build docker container
-  config.vm.provision "shell", inline: <<-END
-    docker build -t decelerate decelerate
-  END
-
-  # stop docker container if it runs already, then start it
-  config.vm.provision "shell", run: "always", inline: <<-END
-    docker stop decelerate
-    docker run --rm -d -p 80:80 --name decelerate decelerate
-  END
+  # install, build, and run docker
+  config.vm.provision "docker" do |d|
+    d.build_image "decelerate",
+      args: "-t decelerate"
+    d.run "decelerate",
+      image: "decelerate:latest",
+      args: "-p 80:80"
+  end
 
 
   #----------------- ninjaDVA specific configuration -------------------------------
