@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var domain = window.location.host.match(/^[^\.]*(\..*)$/);
+        if (domain) {
+            domain = domain[1];
+        } else {
+            domain = "";
+        }
+        var widgetUrl = "//decelerate" + domain + "/UserArea/Widget";
+        $("#decelerateFrame").attr("src", widgetUrl);
+    });
+</script>
+<div id="decelerateWidget" class="widget" data-row="6" data-col="3" data-sizex="4" data-sizey="2">
+    <div>
+        <h1>Control presentation speed</h1>
+        <div>
+                <iframe id="decelerateFrame" style="width: 100%; border: none;" allowtransparency="true"></iframe>
+        </div>
+    </div>
+</div>
