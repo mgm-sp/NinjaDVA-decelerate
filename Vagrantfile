@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "decelerate"
 
   # name and version of vm image
-  config.vm.box = "bento/debian-9"
+  config.vm.box = "bento/debian-10"
 
   # set hostname for vm
   config.vm.hostname = "decelerate"
