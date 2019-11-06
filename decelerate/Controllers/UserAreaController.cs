@@ -11,17 +11,18 @@ using decelerate.Views.UserArea;
 using decelerate.Utils.JWT;
 using decelerate.Models;
 using decelerate.Hubs;
+using decelerate.Utils;
 
 namespace decelerate.Controllers
 {
     public class UserAreaController : Controller
     {
         private readonly ILogger<UserAreaController> _logger;
-        private readonly AuthManager _authManager;
+        private readonly UserAuthManager _authManager;
         private readonly DecelerateDbContext _dbContext;
         private readonly IHubContext<PresenterHub> _hubContext;
 
-        public UserAreaController(ILogger<UserAreaController> logger, AuthManager authManager, DecelerateDbContext dbContext,
+        public UserAreaController(ILogger<UserAreaController> logger, UserAuthManager authManager, DecelerateDbContext dbContext,
             IHubContext<PresenterHub> hubContext)
         {
             _logger = logger;

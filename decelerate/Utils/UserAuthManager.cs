@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using decelerate.Models;
 
-namespace decelerate
+namespace decelerate.Utils
 {
-    public class AuthManager
+    public class UserAuthManager
     {
-        public AuthManager(IConfiguration config)
+        public UserAuthManager(IConfiguration config)
         {
             /* Get JWT key: */
             var key = config.GetValue<string>("JwtKey");

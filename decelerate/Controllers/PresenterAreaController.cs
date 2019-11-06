@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using decelerate.Models;
 using decelerate.Views.PresenterArea;
+using decelerate.Utils;
 
 namespace decelerate.Controllers
 {
@@ -14,10 +15,10 @@ namespace decelerate.Controllers
     public class PresenterAreaController : Controller
     {
         private readonly ILogger<UserAreaController> _logger;
-        private readonly AuthManager _authManager;
+        private readonly UserAuthManager _authManager;
         private readonly DecelerateDbContext _dbContext;
 
-        public PresenterAreaController(ILogger<UserAreaController> logger, AuthManager authManager, DecelerateDbContext dbContext)
+        public PresenterAreaController(ILogger<UserAreaController> logger, UserAuthManager authManager, DecelerateDbContext dbContext)
         {
             _logger = logger;
             _authManager = authManager;

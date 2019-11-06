@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using decelerate.Models;
 using decelerate.Hubs;
+using decelerate.Utils;
 
 namespace decelerate
 {
@@ -29,7 +30,7 @@ namespace decelerate
             services.AddControllersWithViews();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddDbContext<DecelerateDbContext>(options => options.UseSqlite(Configuration["database:connection"]));
-            services.AddSingleton<AuthManager>(new AuthManager(Configuration));
+            services.AddSingleton<UserAuthManager>(new UserAuthManager(Configuration));
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             services.AddSignalR();

@@ -11,17 +11,17 @@ using Microsoft.AspNetCore.Http;
 using decelerate.Views.Home;
 using decelerate.Models;
 using decelerate.Hubs;
-using decelerate.Utils.JWT;
+using decelerate.Utils;
 
 namespace decelerate.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AuthManager _authManager;
+        private readonly UserAuthManager _authManager;
         private readonly DecelerateDbContext _dbContext;
         private readonly IHubContext<PresenterHub> _hubContext;
 
-        public HomeController(AuthManager authManager, DecelerateDbContext dbContext, IHubContext<PresenterHub> hubContext)
+        public HomeController(UserAuthManager authManager, DecelerateDbContext dbContext, IHubContext<PresenterHub> hubContext)
         {
             _authManager = authManager;
             _dbContext = dbContext;
