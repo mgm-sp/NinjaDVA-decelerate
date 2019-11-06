@@ -79,10 +79,13 @@
 
 @section Navigation {
     <li class="nav-item">
-        <a class="nav-link text-dark confirm" asp-area="" asp-controller="PresenterArea" asp-action="ClearVotes" data="Do you really want to delete all votes?">Clear votes</a>
+        <a class="nav-link text-dark confirm" asp-controller="PresenterArea" asp-action="ClearVotes" data="Do you really want to delete all votes?">Clear votes</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark confirm" asp-area="" asp-controller="PresenterArea" asp-action="ClearUsers" data="Do you really want to delete all users?">Clear users</a>
+        <a class="nav-link text-dark confirm" asp-controller="PresenterArea" asp-action="ClearUsers" data="Do you really want to delete all users?">Clear users</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="PresenterArea" asp-action="Logout">Logout</a>
     </li>
 }
 @section Scripts {
