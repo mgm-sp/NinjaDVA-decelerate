@@ -9,7 +9,7 @@ using decelerate.Models;
 namespace decelerate.Migrations
 {
     [DbContext(typeof(DecelerateDbContext))]
-    [Migration("20191106082659_InitialCreate")]
+    [Migration("20191106101252_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,6 +17,22 @@ namespace decelerate.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
+
+            modelBuilder.Entity("decelerate.Models.Presenter", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Presenter");
+                });
 
             modelBuilder.Entity("decelerate.Models.Room", b =>
                 {
@@ -34,10 +50,16 @@ namespace decelerate.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<string>("PresenterName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("Public")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PresenterName");
 
                     b.ToTable("Rooms");
                 });
@@ -62,6 +84,15 @@ namespace decelerate.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("decelerate.Models.Room", b =>
+                {
+                    b.HasOne("decelerate.Models.Presenter", "Presenter")
+                        .WithMany("Rooms")
+                        .HasForeignKey("PresenterName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("decelerate.Models.User", b =>

@@ -16,6 +16,22 @@ namespace decelerate.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
+            modelBuilder.Entity("decelerate.Models.Presenter", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Presenter");
+                });
+
             modelBuilder.Entity("decelerate.Models.Room", b =>
                 {
                     b.Property<int>("Id")
@@ -32,10 +48,16 @@ namespace decelerate.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<string>("PresenterName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("Public")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PresenterName");
 
                     b.ToTable("Rooms");
                 });
@@ -60,6 +82,15 @@ namespace decelerate.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("decelerate.Models.Room", b =>
+                {
+                    b.HasOne("decelerate.Models.Presenter", "Presenter")
+                        .WithMany("Rooms")
+                        .HasForeignKey("PresenterName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("decelerate.Models.User", b =>

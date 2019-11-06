@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace decelerate.Models
 {
@@ -19,6 +20,10 @@ namespace decelerate.Models
 
         [Required,MaxLength(50)]
         public string AdmissionCode { get; set; }
+
+        [Required,ForeignKey("Presenter")]
+        public string PresenterName { get; set; }
+        public Presenter Presenter { get; set; }
 
         public string DisplayText
         {
