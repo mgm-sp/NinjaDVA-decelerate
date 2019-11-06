@@ -29,7 +29,7 @@ namespace decelerate.Models
         {
             get
             {
-                return $"#{Id} - {Name}";
+                return $"{Name} (by {PresenterName})";
             }
         }
 

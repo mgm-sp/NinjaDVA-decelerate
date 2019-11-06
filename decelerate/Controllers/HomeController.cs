@@ -91,11 +91,7 @@ namespace decelerate.Controllers
 
         private IEnumerable<Room> GetPublicRoomList()
         {
-            /* TODO: Implement! */
-            return new List<Room>
-            {
-                new Room { Id = 1, Name = "Hardcoded test room" }
-            };
+            return _dbContext.Rooms.Where(r => r.Public == true).ToList();
         }
     }
 }

@@ -62,16 +62,19 @@ namespace decelerate.Controllers
 
         public IActionResult ShowRoom(int id)
         {
+            /* TODO: Check access rights and show information only for the given room. */
             return View(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult PollRoom()
         {
+            /* TODO: Check access rights and show information only for the given room. */
             return new ObjectResult(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult ClearVotes()
         {
+            /* TODO: Check access rights and apply only for the given room. */
             /* TODO: Fix CSRF vulnerability? */
             /* Set all votes to NULL: */
             foreach (var user in _dbContext.Users)
@@ -85,6 +88,7 @@ namespace decelerate.Controllers
 
         public IActionResult ClearUsers()
         {
+            /* TODO: Check access rights and apply only for the given room. */
             /* TODO: Fix CSRF vulnerability? */
             /* Delete all users: */
             _dbContext.RemoveRange(_dbContext.Users);
