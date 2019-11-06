@@ -33,10 +33,9 @@ namespace decelerate.Models
             /* TODO: Use credentials from the database! */
         }
 
-#pragma warning disable CS1998 // missing await operators
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
-#pragma warning restore CS1998 // missing await operators
         {
+            return AuthenticateResult.Fail("test");
             /* Check if authorization header exists: */
             if (!Request.Headers.ContainsKey("Authorization"))
             {
@@ -70,8 +69,7 @@ namespace decelerate.Models
         }
         protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            Response.Headers["WWW-Authenticate"] = "Basic realm=\"Presenter Area\"";
-            await base.HandleChallengeAsync(properties);
+            Response.Redirect("/PresenterArea/Login");
         }
 
         private readonly string _correctUsername;

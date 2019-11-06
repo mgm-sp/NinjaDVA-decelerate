@@ -9,7 +9,7 @@ using decelerate.Models;
 namespace decelerate.Migrations
 {
     [DbContext(typeof(DecelerateDbContext))]
-    [Migration("20191106101252_InitialCreate")]
+    [Migration("20191106105606_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace decelerate.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Presenter");
+                    b.ToTable("Presenters");
                 });
 
             modelBuilder.Entity("decelerate.Models.Room", b =>

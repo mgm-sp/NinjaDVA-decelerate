@@ -29,7 +29,7 @@ namespace decelerate.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Presenter");
+                    b.ToTable("Presenters");
                 });
 
             modelBuilder.Entity("decelerate.Models.Room", b =>

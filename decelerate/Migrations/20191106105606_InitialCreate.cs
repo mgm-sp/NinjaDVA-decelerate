@@ -8,7 +8,7 @@ namespace decelerate.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Presenter",
+                name: "Presenters",
                 columns: table => new
                 {
                     Name = table.Column<string>(maxLength: 50, nullable: false),
@@ -16,7 +16,7 @@ namespace decelerate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Presenter", x => x.Name);
+                    table.PrimaryKey("PK_Presenters", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,9 +34,9 @@ namespace decelerate.Migrations
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rooms_Presenter_PresenterName",
+                        name: "FK_Rooms_Presenters_PresenterName",
                         column: x => x.PresenterName,
-                        principalTable: "Presenter",
+                        principalTable: "Presenters",
                         principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -81,7 +81,7 @@ namespace decelerate.Migrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Presenter");
+                name: "Presenters");
         }
     }
 }

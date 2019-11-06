@@ -1,0 +1,38 @@
+﻿@model decelerate.Views.PresenterArea.LoginModel
+@{
+    ViewData["Title"] = "Presenter Login";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>@ViewData["Title"]</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            ...
+        </p>
+    </div>
+    <div class="col-md-6">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input class="form-control" asp-for="Username" placeholder="Enter your username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input class="form-control" asp-for="Password" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <p class="text-danger">@ViewData["ErrorMessage"]</p>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a role="button" class="btn btn-secondary" asp-controller="PresenterArea" asp-action="Register">Register presenter account ...</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+}

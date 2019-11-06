@@ -15,6 +15,8 @@ namespace decelerate.Models
 
         public DbSet<Room> Rooms { get; set; }
 
+        public DbSet<Presenter> Presenters { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /* Create composite key for the user model: */
