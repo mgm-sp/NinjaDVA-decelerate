@@ -61,6 +61,11 @@ namespace decelerate.Controllers
             return RedirectToAction("Index", "PresenterArea");
         }
 
+        public IActionResult CreateRoom()
+        {
+            return View();
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
