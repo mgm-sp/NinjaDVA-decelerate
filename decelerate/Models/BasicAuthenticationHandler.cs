@@ -28,16 +28,9 @@ namespace decelerate.Models
         ) : base(options, logger, encoder, clock)
         {
             /* Get username & password from config: */
-            _correctUsername = config.GetValue<string>("Presenter:Username");
-            if (_correctUsername == null || _correctUsername == "")
-            {
-                throw new ArgumentException("Invalid presenter username configured");
-            }
-            _correctPassword = config.GetValue<string>("Presenter:Password");
-            if (_correctPassword == null || _correctPassword == "")
-            {
-                throw new ArgumentException("Invalid presenter password configured");
-            }
+            _correctUsername = "presenter";
+            _correctPassword = "supersecret";
+            /* TODO: Use credentials from the database! */
         }
 
 #pragma warning disable CS1998 // missing await operators

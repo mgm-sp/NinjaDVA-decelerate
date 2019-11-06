@@ -77,7 +77,7 @@ namespace decelerate.Controllers
         public IActionResult Widget(IndexModel input)
         {
             /* Check auth: */
-            if (!IsAuthenticated(out IActionResult result, out User user)) return View(null);
+            if (!IsAuthenticated(out IActionResult _, out User user)) return View(null);
             input.User = user;
             /* Check input and register the vote: */
             CheckAndVote(input, user);

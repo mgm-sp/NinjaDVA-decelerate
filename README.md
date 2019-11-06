@@ -21,8 +21,6 @@ Configuration is done in `decelerate/appsettings.json`.
 * **UserTimeoutSeconds**
   * time after which an inactive user gets logged out automatically (in seconds)
   * after automatic logout, the vote of the user is removed and the username is available again
-* **Presenter ⇒ Username/Password**
-  * username and password for the presenter area
 
 ## Docker Container
 To create the docker container, change into the `decelerate` directory and execute
@@ -45,7 +43,7 @@ cd NinjaDVA
 ```shell
 git clone git@spcode.mgm-edv.de:NinjaDVA/decelerate.git decelerate_vm
 ```
-3. Configure decelerate (change *JwtKey* and *Presenter ⇒ Password*):
+3. Configure decelerate (change *JwtKey*):
 ```shell
 vim decelerate_vm/decelerate/appsettings.json
 ```
