@@ -62,13 +62,25 @@ namespace decelerate.Controllers
 
         public IActionResult ShowRoom(int id)
         {
-            /* TODO: Check access rights and show information only for the given room. */
-            return View(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            /* Check access rights and get users: */
+            var users = GetUsers(id);
+            if (users == null)
+            {
+                return RedirectToAction("Index", "PresenterArea");
+            }
+
+            return View(new ShowRoomModel { Users = users });
         }
 
-        public IActionResult PollRoom()
+        public IActionResult PollRoom(int id)
         {
-            /* TODO: Check access rights and show information only for the given room. */
+            /* Check access rights and get users: */
+            var users = GetUsers(id);
+            if (users == null)
+            {
+                return new UnauthorizedResult();
+            }
+
             return new ObjectResult(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
@@ -219,6 +231,24 @@ namespace decelerate.Controllers
             var presenter = _dbContext.Presenters.First(p => p.Name == User.Identity.Name);
             _dbContext.Entry(presenter).Collection(p => p.Rooms).Load();
             return presenter;
+        }
+
+        private IEnumerable<User> GetUsers(int roomId)
+        {
+            /* Check if room exists: */
+            var room = _dbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room == null)
+            {
+                return null;
+            }
+
+            /* Check if presenter owns the room: */
+            if (room.PresenterName != User.Identity.Name)
+            {
+                return null;
+            }
+
+            return _authManager.GetActiveUsers(_dbContext, roomId);
         }
     }
 }

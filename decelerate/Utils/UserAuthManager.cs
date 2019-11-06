@@ -75,6 +75,12 @@ namespace decelerate.Utils
             return dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
         }
 
+        public IEnumerable<User> GetActiveUsers(DecelerateDbContext dbContext, int roomId)
+        {
+            return dbContext.Users.Where(u => (u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow)
+                && (u.RoomId == roomId)).ToList();
+        }
+
         private readonly JWT<User> _jwt;
         private readonly int _userTimeoutSeconds;
     }

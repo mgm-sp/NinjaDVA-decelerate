@@ -89,7 +89,7 @@
     </li>
 }
 @section Scripts {
-    <a id="pollUrl" asp-controller="PresenterArea" asp-action="PollRoom"></a>
+    <a id="pollUrl" asp-controller="PresenterArea" asp-action="PollRoom" asp-route-id="@ViewContext.RouteData.Values["id"]"></a>
     <a id="hubUrl" asp-controller="PresenterArea" asp-action="Hub"></a>
     <script src="~/lib/signalr/signalr.min.js"></script>
     <script src="~/js/presenterarea.js" asp-append-version="true"></script>
