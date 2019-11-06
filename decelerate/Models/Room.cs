@@ -14,6 +14,12 @@ namespace decelerate.Models
         [Required,MaxLength(50)]
         public string Name { get; set; }
 
+        [Required]
+        public bool Public { get; set; }
+
+        [Required,MaxLength(50)]
+        public string AdmissionCode { get; set; }
+
         public string DisplayText
         {
             get

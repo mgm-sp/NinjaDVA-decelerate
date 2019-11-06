@@ -9,7 +9,7 @@ using decelerate.Models;
 namespace decelerate.Migrations
 {
     [DbContext(typeof(DecelerateDbContext))]
-    [Migration("20191106081818_InitialCreate")]
+    [Migration("20191106082659_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,10 +24,18 @@ namespace decelerate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AdmissionCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("Public")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

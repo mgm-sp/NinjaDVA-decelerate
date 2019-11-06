@@ -13,7 +13,9 @@ namespace decelerate.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(maxLength: 50, nullable: false)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Public = table.Column<bool>(nullable: false),
+                    AdmissionCode = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
