@@ -15,10 +15,31 @@
             if you can't keep up or if it's right on the spot. Imagine it like both a brake pedal and a gas pedal, allowing you to
             <em>decelerate</em> (hence the name) or accelerate the talk.
         </p>
-        <p>Please enter your name and press <em>Start</em> to continue.</p>
+        <p>
+            To vote, please select a room, enter your name and press <em>Start</em> to continue. You can either select a public
+            room from the dropdown list or use the code that was given to you by your presenter to enter a private room.
+        </p>
+        <p>
+            If you are a presenter and want to create your own room, ...
+        </p>
     </div>
     <div class="col-md-6">
         <form method="post">
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="publicRoom">Public room</label>
+                    <select class="form-control" id="publicRoom" asp-for="RoomId" asp-items="@(new SelectList(Model.PublicRoomList,"Id","DisplayText"))">
+                        <option value="0">Select a room</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-center">
+                    <p>or</p>
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="privateRoom">Private room</label>
+                    <input type="text" class="form-control" id="privateRoom" placeholder="Enter the room code" asp-for="RoomCode" />
+                </div>
+            </div>
             <div class="form-group">
                 <label for="inputName">Name</label>
                 @if (ViewData["ErrorMessage"] != null)

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -35,13 +36,17 @@ namespace decelerate.Controllers
                 /* User is authenticated, redirect to user area: */
                 return RedirectToAction("Index", "UserArea");
             }
-            return View();
+            return View(new IndexModel
+            {
+                PublicRoomList = GetPublicRoomList()
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(IndexModel input)
         {
+            input.PublicRoomList = GetPublicRoomList();
             /* Check input: */
             if (!ModelState.IsValid)
             {
@@ -82,6 +87,15 @@ namespace decelerate.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private IEnumerable<Room> GetPublicRoomList()
+        {
+            /* TODO: Implement! */
+            return new List<Room>
+            {
+                new Room { Id = 1, Name = "Hardcoded test room" }
+            };
         }
     }
 }
