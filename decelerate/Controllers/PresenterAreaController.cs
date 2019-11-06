@@ -57,7 +57,7 @@ namespace decelerate.Controllers
             _dbContext.SaveChanges();
 
             /* Redirect to newly created room: */
-            return RedirectToAction("ShowRoom", "PresenterArea", newRoom.Id);
+            return RedirectToAction("ShowRoom", "PresenterArea", new { id = newRoom.Id });
         }
 
         public IActionResult ShowRoom(int id)
@@ -84,10 +84,42 @@ namespace decelerate.Controllers
             return new ObjectResult(new ShowRoomModel { Room = room });
         }
 
+        [HttpGet]
         public IActionResult ManageRoom(int id)
         {
+            /* Check access rights and get room: */
+            var room = GetRoom(id);
+            if (room == null)
+            {
+                return RedirectToAction("Index", "PresenterArea");
+            }
+
             /* TODO: Implement delete, change name/public, renew code, clear votes, clear users */
-            return View();
+            return View(new ManageRoomModel(room));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ManageRoom(ManageRoomModel input, int id)
+        {
+            /* Check access rights and get room: */
+            var room = GetRoom(id);
+            if (room == null)
+            {
+                return RedirectToAction("Index", "PresenterArea");
+            }
+
+            /* Check input: */
+            if (ModelState.IsValid)
+            {
+                room.Name = input.Name;
+                room.Public = input.Public;
+                _dbContext.SaveChanges();
+                return RedirectToAction("ShowRoom", "PresenterArea", new { id = room.Id });
+            }
+
+            input.Room = room;
+            return View(input);
         }
 
         private IActionResult ClearVotes()
