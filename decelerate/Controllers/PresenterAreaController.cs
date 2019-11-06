@@ -94,7 +94,6 @@ namespace decelerate.Controllers
                 return RedirectToAction("Index", "PresenterArea");
             }
 
-            /* TODO: Implement delete, change name/public, renew code, clear votes, clear users */
             return View(new ManageRoomModel(room));
         }
 
@@ -122,29 +121,53 @@ namespace decelerate.Controllers
             return View(input);
         }
 
-        private IActionResult ClearVotes()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RoomAction(int id)
         {
-            /* TODO: Check access rights and apply only for the given room. */
-            /* TODO: Fix CSRF vulnerability? */
-            /* Set all votes to NULL: */
-            foreach (var user in _dbContext.Users)
+            /* Check access rights and get room: */
+            var room = GetRoom(id);
+            if (room == null)
             {
-                user.SpeedChoice = null;
+                return RedirectToAction("Index", "PresenterArea");
             }
-            _dbContext.SaveChanges();
-            /* Redirect back: */
-            return RedirectToAction("Index", "PresenterArea");
-        }
 
-        private IActionResult ClearUsers()
-        {
-            /* TODO: Check access rights and apply only for the given room. */
-            /* TODO: Fix CSRF vulnerability? */
-            /* Delete all users: */
-            _dbContext.RemoveRange(_dbContext.Users);
-            _dbContext.SaveChanges();
-            /* Redirect back: */
-            return RedirectToAction("Index", "PresenterArea");
+            /* Check action: */
+            if (Request.Form.ContainsKey("submitClearVotes"))
+            {
+                /* Clear votes: */
+                foreach (var user in room.Users)
+                {
+                    user.SpeedChoice = null;
+                }
+                _dbContext.SaveChanges();
+                return RedirectToAction("ShowRoom", "PresenterArea", new { id = room.Id });
+            }
+            else if (Request.Form.ContainsKey("submitClearUsers"))
+            {
+                /* Clear users: */
+                _dbContext.RemoveRange(room.Users);
+                _dbContext.SaveChanges();
+                return RedirectToAction("ShowRoom", "PresenterArea", new { id = room.Id });
+            }
+            else if (Request.Form.ContainsKey("submitRenewCode"))
+            {
+                /* Renew admission code: */
+                room.AdmissionCode = RandomString.Get(25);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else if (Request.Form.ContainsKey("submitDeleteRoom"))
+            {
+                /* Delete room: */
+                _dbContext.Remove(room);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("ManageRoom", new { id = room.Id });
+            }
         }
 
         [AllowAnonymous]

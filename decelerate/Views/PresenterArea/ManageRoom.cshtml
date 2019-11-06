@@ -29,5 +29,23 @@
     </div>
     <div class="col-md-6">
         <h5>Other actions</h5>
+        <form method="post" asp-action="RoomAction" asp-route-id="@Model.Room.Id">
+            <div class="btn-group-vertical w-100" role="group">
+                <button type="submit" name="submitClearVotes" class="btn btn-warning confirm" data-confirm="Do you really want to remove all votes?">Clear all votes</button>
+                <button type="submit" name="submitClearUsers" class="btn btn-warning confirm" data-confirm="Do you really want to remove all users?">Clear all users</button>
+                <button type="submit" name="submitRenewCode" class="btn btn-warning confirm" data-confirm="Do you really want to generate a new admission code?">Renew admission code</button>
+                <button type="submit" name="submitDeleteRoom" class="btn btn-danger confirm" data-confirm="Do you really want to delete the room completely?">Delete room</button>
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScripts" />
+    <script type="text/javascript">
+        /* Register confirm windows: */
+        $('.confirm').click(function () {
+            return confirm($(this).attr('data-confirm'));
+        });
+    </script>
+}
