@@ -19,7 +19,7 @@
                 /* Clear all user entries: */
                 $('#users').empty();
                 /* Add new user entries: */
-                data.users.forEach(function (entry) {
+                data.room.users.forEach(function (entry) {
                     /* Get template content: */
                     var templateId = (entry.transformedSpeedChoice === null) ? '#userTemplateNotVoted' : '#userTemplateVoted';
                     var html = $(templateId).html();

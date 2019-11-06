@@ -62,29 +62,35 @@ namespace decelerate.Controllers
 
         public IActionResult ShowRoom(int id)
         {
-            /* Check access rights and get users: */
-            var users = GetUsers(id);
-            if (users == null)
+            /* Check access rights and get room: */
+            var room = GetRoom(id);
+            if (room == null)
             {
                 return RedirectToAction("Index", "PresenterArea");
             }
 
-            return View(new ShowRoomModel { Users = users });
+            return View(new ShowRoomModel { Room = room });
         }
 
         public IActionResult PollRoom(int id)
         {
-            /* Check access rights and get users: */
-            var users = GetUsers(id);
-            if (users == null)
+            /* Check access rights and get room: */
+            var room = GetRoom(id);
+            if (room == null)
             {
                 return new UnauthorizedResult();
             }
 
-            return new ObjectResult(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            return new ObjectResult(new ShowRoomModel { Room = room });
         }
 
-        public IActionResult ClearVotes()
+        public IActionResult ManageRoom(int id)
+        {
+            /* TODO: Implement delete, change name/public, renew code, clear votes, clear users */
+            return View();
+        }
+
+        private IActionResult ClearVotes()
         {
             /* TODO: Check access rights and apply only for the given room. */
             /* TODO: Fix CSRF vulnerability? */
@@ -98,7 +104,7 @@ namespace decelerate.Controllers
             return RedirectToAction("Index", "PresenterArea");
         }
 
-        public IActionResult ClearUsers()
+        private IActionResult ClearUsers()
         {
             /* TODO: Check access rights and apply only for the given room. */
             /* TODO: Fix CSRF vulnerability? */
@@ -233,7 +239,7 @@ namespace decelerate.Controllers
             return presenter;
         }
 
-        private IEnumerable<User> GetUsers(int roomId)
+        private Room GetRoom(int roomId)
         {
             /* Check if room exists: */
             var room = _dbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
@@ -248,7 +254,10 @@ namespace decelerate.Controllers
                 return null;
             }
 
-            return _authManager.GetActiveUsers(_dbContext, roomId);
+            /* Fetch the users: */
+            _dbContext.Entry(room).Collection(r => r.Users).Load();
+
+            return room;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace decelerate.Views.PresenterArea
 {
     public class ShowRoomModel
     {
-        public IEnumerable<User> Users { get; set; }
+        public Room Room { get; set; }
         public int AverageSpeedChoice
         {
             get
@@ -16,7 +16,7 @@ namespace decelerate.Views.PresenterArea
                 /* Calculate sum and count over all users who voted: */
                 int sumSpeedChoice = 0;
                 uint cntSpeedChoice = 0;
-                foreach (var user in Users)
+                foreach (var user in Room.Users)
                 {
                     if (user.SpeedChoice != null)
                     {
