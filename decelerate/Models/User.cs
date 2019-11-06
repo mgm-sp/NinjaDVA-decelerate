@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace decelerate.Models
 {
     public class User
     {
-        [Key]
+        [Required,MaxLength(50)]
         public string Name { get; set; }
+
+        [Required,ForeignKey("Room")]
+        public int RoomId { get; set; }
+        public Room Room { get; set; }
 
         public int? SpeedChoice { get; set; }
 

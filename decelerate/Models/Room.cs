@@ -8,8 +8,10 @@ namespace decelerate.Models
 {
     public class Room
     {
+        [Key,Required]
         public int Id { get; set; }
 
+        [Required,MaxLength(50)]
         public string Name { get; set; }
 
         public string DisplayText
@@ -19,5 +21,7 @@ namespace decelerate.Models
                 return $"#{Id} - {Name}";
             }
         }
+
+        public ICollection<User> Users { get; set; }
     }
 }

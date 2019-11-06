@@ -10,6 +10,15 @@ namespace decelerate.Models
     public class DecelerateDbContext : DbContext
     {
         public DecelerateDbContext(DbContextOptions<DecelerateDbContext> options) : base(options) {}
+
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Room> Rooms { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            /* Create composite key for the user model: */
+            modelBuilder.Entity<User>().HasKey(u => new { u.Name, u.RoomId });
+        }
     }
 }
