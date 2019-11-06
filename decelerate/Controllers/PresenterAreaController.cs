@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using decelerate.Models;
 using decelerate.Views.PresenterArea;
@@ -69,7 +72,7 @@ namespace decelerate.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginModel input)
+        public async Task<IActionResult> Login(LoginModel input)
         {
             /* Check input: */
             if (!ModelState.IsValid)
@@ -99,8 +102,11 @@ namespace decelerate.Controllers
                 return View(input);
             }
 
-            /* TODO: Create session and redirect! */
-            return null;
+            /* Create session: */
+            await CreateSession(input.Username);
+
+            /* Redirect to the presenter area: */
+            return RedirectToAction("Index", "PresenterArea");
         }
 
         [AllowAnonymous]
@@ -114,7 +120,7 @@ namespace decelerate.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterModel input)
+        public async Task<IActionResult> Register(RegisterModel input)
         {
             /* Check input: */
             if (!ModelState.IsValid)
@@ -135,9 +141,29 @@ namespace decelerate.Controllers
                 Name = input.Username.ToLower(),
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(input.Password)
             });
+            _dbContext.SaveChanges();
 
-            /* TODO: Create session and redirect! */
-            return null;
+            /* Create session: */
+            await CreateSession(input.Username);
+
+            /* Redirect to the presenter area: */
+            return RedirectToAction("Index", "PresenterArea");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "PresenterArea");
+        }
+
+        private async Task CreateSession(string username)
+        {
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, username.ToLower()));
+            identity.AddClaim(new Claim(ClaimTypes.Name, username.ToLower()));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "presenter"));
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }
