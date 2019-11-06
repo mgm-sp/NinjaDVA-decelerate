@@ -14,6 +14,6 @@ namespace decelerate.Models
         [Required,MaxLength(100)]
         public string PasswordHash { get; set; }
 
-        public ICollection<Room> Rooms { get; set; }
+        public virtual ICollection<Room> Rooms { get; set; }
     }
 }

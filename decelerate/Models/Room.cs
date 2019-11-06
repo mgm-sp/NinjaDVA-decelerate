@@ -23,7 +23,7 @@ namespace decelerate.Models
 
         [Required,ForeignKey("Presenter")]
         public string PresenterName { get; set; }
-        public Presenter Presenter { get; set; }
+        public virtual Presenter Presenter { get; set; }
 
         public string DisplayText
         {
@@ -33,6 +33,6 @@ namespace decelerate.Models
             }
         }
 
-        public ICollection<User> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

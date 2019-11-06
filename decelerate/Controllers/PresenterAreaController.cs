@@ -28,14 +28,46 @@ namespace decelerate.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Room()
+        [HttpGet]
+        public IActionResult Index()
         {
-            return View(new RoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            return View(new IndexModel { Presenter = GetPresenter() });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(IndexModel input)
+        {
+            input.Presenter = GetPresenter();
+            /* Check input: */
+            if (!ModelState.IsValid)
+            {
+                return View(input);
+            }
+
+            /* Create room: */
+            var newRoom = new Room
+            {
+                Name = input.Name,
+                Public = input.Public,
+                AdmissionCode = RandomString.Get(25),
+                Presenter = input.Presenter
+            };
+            _dbContext.Rooms.Add(newRoom);
+            _dbContext.SaveChanges();
+
+            /* Redirect to newly created room: */
+            return RedirectToAction("ShowRoom", "PresenterArea", newRoom.Id);
+        }
+
+        public IActionResult ShowRoom(int id)
+        {
+            return View(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult PollRoom()
         {
-            return new ObjectResult(new RoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            return new ObjectResult(new ShowRoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult ClearVotes()
@@ -59,11 +91,6 @@ namespace decelerate.Controllers
             _dbContext.SaveChanges();
             /* Redirect back: */
             return RedirectToAction("Index", "PresenterArea");
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [AllowAnonymous]
@@ -180,6 +207,14 @@ namespace decelerate.Controllers
             identity.AddClaim(new Claim(ClaimTypes.Role, "presenter"));
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
+
+        private Presenter GetPresenter()
+        {
+            /* Get presenter from database and fetch the rooms: */
+            var presenter = _dbContext.Presenters.First(p => p.Name == User.Identity.Name);
+            _dbContext.Entry(presenter).Collection(p => p.Rooms).Load();
+            return presenter;
         }
     }
 }

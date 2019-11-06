@@ -14,7 +14,7 @@ namespace decelerate.Models
 
         [Required,ForeignKey("Room")]
         public int RoomId { get; set; }
-        public Room Room { get; set; }
+        public virtual Room Room { get; set; }
 
         public int? SpeedChoice { get; set; }
 

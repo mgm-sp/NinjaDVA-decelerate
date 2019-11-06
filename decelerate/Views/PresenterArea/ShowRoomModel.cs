@@ -6,7 +6,7 @@ using decelerate.Models;
 
 namespace decelerate.Views.PresenterArea
 {
-    public class RoomModel
+    public class ShowRoomModel
     {
         public IEnumerable<User> Users { get; set; }
         public int AverageSpeedChoice
