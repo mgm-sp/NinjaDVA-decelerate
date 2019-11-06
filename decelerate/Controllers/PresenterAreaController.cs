@@ -65,7 +65,12 @@ namespace decelerate.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            /* TODO: Redirect if already logged in. */
+            /* Redirect if already logged in: */
+            if (HttpContext.User != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "PresenterArea");
+            }
+
             return View();
         }
 
@@ -113,7 +118,12 @@ namespace decelerate.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            /* TODO: Redirect if already logged in. */
+            /* Redirect if already logged in: */
+            if (HttpContext.User != null && HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "PresenterArea");
+            }
+
             return View();
         }
 
