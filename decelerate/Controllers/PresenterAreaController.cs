@@ -78,7 +78,7 @@ namespace decelerate.Controllers
 
             /* Check if presenter exists: */
             var invalid = false;
-            var presenter = _dbContext.Presenters.FirstOrDefault(p => p.Name == input.Username);
+            var presenter = _dbContext.Presenters.FirstOrDefault(p => p.Name == input.Username.ToLower());
             if (presenter == null)
             {
                 invalid = true;
@@ -97,6 +97,43 @@ namespace decelerate.Controllers
                 ViewData["ErrorMessage"] = "Invalid username or password.";
                 return View(input);
             }
+
+            /* TODO: Create session and redirect! */
+            return null;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            /* TODO: Redirect if already logged in. */
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(RegisterModel input)
+        {
+            /* Check input: */
+            if (!ModelState.IsValid)
+            {
+                return View(input);
+            }
+
+            /* Check if presenter already exists: */
+            if (_dbContext.Presenters.Count(p => p.Name == input.Username.ToLower()) != 0)
+            {
+                ModelState.AddModelError("Username", "This username is already taken.");
+                return View(input);
+            }
+
+            /* Register presenter: */
+            _dbContext.Presenters.Add(new Presenter
+            {
+                Name = input.Username.ToLower(),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(input.Password)
+            });
 
             /* TODO: Create session and redirect! */
             return null;
