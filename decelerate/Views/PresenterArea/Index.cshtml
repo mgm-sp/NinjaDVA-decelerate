@@ -2,95 +2,47 @@
 @{
     ViewData["Title"] = "Presenter Area";
     ViewData["HomeController"] = "PresenterArea";
-    /* Calculate slider thresholds: */
-    uint t1 = (100 - Model.DangerThreshold) / 2;
-    uint t2 = (100 - Model.WarningThreshold) / 2;
-    uint t3 = (100 + Model.WarningThreshold) / 2;
-    uint t4 = (100 + Model.DangerThreshold) / 2;
-    /* Create gradient: */
-    var gradient = $"linear-gradient(90deg, #f8d7da {t1 - 2}%, #fff3cd {t1 + 2}%, #fff3cd {t2 - 2}%, #d4edda {t2 + 2}%, #d4edda {t3 - 2}%, #fff3cd {t3 + 2}%, #fff3cd {t4 - 2}%, #f8d7da {t4 + 2}%)";
 }
 
 <div class="row">
     <div class="col-md-12">
-        <h3>Welcome to the presenter area!</h3>
-        The audience wants you to ...
-        <div id="statusDiv" class="alert alert-@Model.Color display-1 text-center">
-            <p id="statusText">@Model.Text</p>
-        </div>
-        <div class="w-100 alert alert-secondary px-0" style="background: @gradient;">
-            <div class="text-right" style="width: @Model.TransformedAverageSpeedChoice%" id="statusSlider">&#11044;</div>
-        </div>
-        <div class="d-flex justify-content-around">
-            <div>&#10229; slower</div>
-            <div>faster &#10230;</div>
-        </div>
+        <h3>Welcome to the presenter area, @User.Identity.Name!</h3>
     </div>
 </div>
-<div class="row justify-content-md-center">
+<div class="row">
     <div class="col-md-6">
-        <h4 class="text-center">Individual votes</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Vote</th>
-                </tr>
-            </thead>
-            <tbody id="users">
-                @foreach (var user in Model.Users)
+        <h5>Your rooms</h5>
+        <p>...</p>
+    </div>
+    <div class="col-md-6">
+        <h5>Create a new room</h5>
+        <form method="post">
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                @if (ViewData["ErrorMessage"] != null)
                 {
-                    <tr>
-                        <th scope="row">@user.Name</th>
-                        <td>
-                            @if (user.SpeedChoice.HasValue)
-                            {
-                                <div class="w-100 alert alert-secondary p-0" style="background: @gradient;">
-                                    <div class="text-right" style="font-size: .75em; width: @user.TransformedSpeedChoice%">&#11044;</div>
-                                </div>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                    </tr>
+                    <input type="text" class="form-control is-invalid" id="inputName" placeholder="Enter a room name" required asp-for="Name" />
+                    <div class="invalid-feedback" asp-validation-for="Name">@ViewData["ErrorMessage"]</div>
                 }
-            </tbody>
-        </table>
+                else
+                {
+                    <input type="text" class="form-control" id="inputName" placeholder="Enter a room name" required asp-for="Name" />
+                    <div class="invalid-feedback" asp-validation-for="Name"></div>
+                }
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="checkPublic" />
+                    <label class="form-check-label" for="checkPublic">Public room</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
     </div>
 </div>
-<template id="userTemplateNotVoted">
-    <tr>
-        <th scope="row">[name]</th>
-        <td><span>-</span></td>
-    </tr>
-</template>
-<template id="userTemplateVoted">
-    <tr>
-        <th scope="row">[name]</th>
-        <td>
-            <div class="w-100 alert alert-secondary p-0" style="background: @gradient;">
-                <div class="text-right innerUserSlider" style="font-size: .75em">&#11044;</div>
-            </div>
-        </td>
-    </tr>
-</template>
 
 @section Navigation {
     <li class="nav-item">
-        <a class="nav-link text-dark confirm" asp-controller="PresenterArea" asp-action="ClearVotes" data="Do you really want to delete all votes?">Clear votes</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark confirm" asp-controller="PresenterArea" asp-action="ClearUsers" data="Do you really want to delete all users?">Clear users</a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link text-dark" asp-controller="PresenterArea" asp-action="Logout">Logout</a>
     </li>
-}
-@section Scripts {
-    <a id="pollUrl" asp-controller="PresenterArea" asp-action="Poll"></a>
-    <a id="hubUrl" asp-controller="PresenterArea" asp-action="Hub"></a>
-    <script src="~/lib/signalr/signalr.min.js"></script>
-    <script src="~/js/presenterarea.js" asp-append-version="true"></script>
 }

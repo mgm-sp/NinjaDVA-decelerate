@@ -99,3 +99,4 @@ The page is updated automatically each time a user logs in, votes or logs out.
 ## Todo List
 * support for multiple (public and private) rooms
 * slides
+* multiple SignalR hubs (one for each room)

@@ -28,14 +28,14 @@ namespace decelerate.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Room()
         {
-            return View(new IndexModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            return View(new RoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
-        public IActionResult Poll()
+        public IActionResult PollRoom()
         {
-            return new ObjectResult(new IndexModel { Users = _authManager.GetActiveUsers(_dbContext) });
+            return new ObjectResult(new RoomModel { Users = _authManager.GetActiveUsers(_dbContext) });
         }
 
         public IActionResult ClearVotes()
@@ -61,7 +61,7 @@ namespace decelerate.Controllers
             return RedirectToAction("Index", "PresenterArea");
         }
 
-        public IActionResult CreateRoom()
+        public IActionResult Index()
         {
             return View();
         }
