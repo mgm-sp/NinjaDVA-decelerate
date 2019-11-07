@@ -137,3 +137,4 @@ name of the room you want to see.
 ## Todo List
 * slides
 * access attacker websites automatically
+* JoinRoom for the correct room returns the flag?
