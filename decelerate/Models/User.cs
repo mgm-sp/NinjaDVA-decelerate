@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace decelerate.Models
 {
@@ -14,6 +15,7 @@ namespace decelerate.Models
 
         [Required,ForeignKey("Room")]
         public int RoomId { get; set; }
+        [JsonIgnore]
         public virtual Room Room { get; set; }
 
         public int? SpeedChoice { get; set; }

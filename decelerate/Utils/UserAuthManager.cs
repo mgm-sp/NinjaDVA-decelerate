@@ -32,9 +32,9 @@ namespace decelerate.Utils
             }
         }
 
-        public bool IsUserActive(string name, DecelerateDbContext dbContext)
+        public bool IsUserActive(string name, int roomId, DecelerateDbContext dbContext)
         {
-            var count = dbContext.Users.Count(u => (u.Name == name) &&
+            var count = dbContext.Users.Count(u => (u.Name == name) && (u.RoomId == roomId) &&
                 (u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow));
             return (count != 0);
         }
@@ -43,24 +43,32 @@ namespace decelerate.Utils
         {
             /* Parse JWT token: */
             var jwtUser = _jwt.Decode(sessionCookie, out errorMessage);
+
             /* Check payload: */
             if (jwtUser == null)
             {
                 user = null;
                 return false;
             }
+
             /* Check name and timeout against the database: */
-            if (!IsUserActive(jwtUser.Name, dbContext))
+            if (!IsUserActive(jwtUser.Name, jwtUser.RoomId, dbContext))
             {
                 user = null;
                 return false;
             }
+
             /* Get updated user information from the database: */
-            user = dbContext.Users.First(u => u.Name == jwtUser.Name);
+            user = dbContext.Users.First(u => (u.Name == jwtUser.Name) && (u.RoomId == jwtUser.RoomId));
+
             /* Update last action: */
             user.LastAction = DateTime.UtcNow;
             dbContext.Users.Update(user);
             dbContext.SaveChanges();
+
+            /* Get room information: */
+            dbContext.Entry(user).Reference(u => u.Room).Load();
+
             /* Return success: */
             return true;
         }
@@ -68,11 +76,6 @@ namespace decelerate.Utils
         public string GetToken(User user)
         {
             return _jwt.Encode(user);
-        }
-
-        public IEnumerable<User> GetActiveUsers(DecelerateDbContext dbContext)
-        {
-            return dbContext.Users.Where(u => u.LastAction.AddSeconds(_userTimeoutSeconds) >= DateTime.UtcNow).ToList();
         }
 
         public IEnumerable<User> GetActiveUsers(DecelerateDbContext dbContext, int roomId)

@@ -28,8 +28,8 @@
         <form method="post">
             <div class="form-row">
                 <div class="form-group col-md-5">
-                    <label for="publicRoom">Public room</label>
-                    <select class="form-control" id="publicRoom" asp-for="RoomId" asp-items="@(new SelectList(Model.PublicRoomList,"Id","DisplayText"))">
+                    <label asp-for="RoomId">Public room</label>
+                    <select class="form-control" asp-for="RoomId" asp-items="@(new SelectList(Model.PublicRoomList,"Id","DisplayText"))">
                         <option value="0">Select a room</option>
                     </select>
                 </div>
@@ -37,22 +37,17 @@
                     <p>or</p>
                 </div>
                 <div class="form-group col-md-5">
-                    <label for="privateRoom">Private room</label>
-                    <input type="text" class="form-control" id="privateRoom" placeholder="Enter the room code" asp-for="RoomCode" />
+                    <label asp-for="RoomCode">Private room</label>
+                    <input class="form-control" placeholder="Enter the room code" asp-for="RoomCode" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputName">Name</label>
-                @if (ViewData["ErrorMessage"] != null)
-                {
-                    <input type="text" class="form-control is-invalid" id="inputName" placeholder="Enter your name" required asp-for="Name" />
-                    <div class="invalid-feedback" asp-validation-for="Name">@ViewData["ErrorMessage"]</div>
-                }
-                else
-                {
-                    <input type="text" class="form-control" id="inputName" placeholder="Enter your name" required asp-for="Name" />
-                    <div class="invalid-feedback" asp-validation-for="Name"></div>
-                }
+                <span class="text-danger">@ViewData["RoomErrorMessage"]</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" placeholder="Enter your name" asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Start</button>
         </form>
