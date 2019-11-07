@@ -1,8 +1,6 @@
 decelerate
 ==========
-
-## Warning
-:bangbang: This application purposely contains vulnerabilities. Use with caution!
+> :bangbang: **Warning:** This application purposely contains vulnerabilities. Use with caution!
 
 ## Description
 This tool allows the audience to give feedback about the talking speed of a presenter.
@@ -23,6 +21,9 @@ Configuration is done in `decelerate/appsettings.json`.
   * after automatic logout, the vote of the user is removed and the username is available again
 
 ## Docker Container
+> :warning: **Note:** When you use the Docker container, restarting it wipes the complete database, i.e.
+> presenters, rooms, users and votes are deleted.
+
 To create the docker container, change into the `decelerate` directory and execute
 ```
 docker build -t decelerate .
@@ -34,6 +35,9 @@ docker run -p 8080:80 decelerate
 ```
 
 ## NinjaDVA Integration
+> :warning: **Note:** This uses the Docker container, which means that restarting it wipes the complete database,
+> i.e. presenters, rooms, users and votes are deleted.
+
 1. Clone the NinjaDVA repository and change into the created directory:
 ```shell
 git clone https://github.com/mgm-sp/NinjaDVA.git
