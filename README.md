@@ -98,6 +98,5 @@ The page is updated automatically each time a user logs in, votes or logs out.
 
 ## Todo List
 * slides
-* add help texts to all new pages
 * create new screenshots and document the interface
 * access attacker websites automatically
