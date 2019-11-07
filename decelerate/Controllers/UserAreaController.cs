@@ -94,13 +94,19 @@ namespace decelerate.Controllers
                 _dbContext.Users.Remove(user);
                 _dbContext.SaveChanges();
             }
+
             /* Remove JWT cookie: */
             Response.Cookies.Append("session", "", new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(-1)
             });
+
             /* Notify presenter about the logout: */
-            await _hubContext.Clients.Group($"rooms/{user.Room.Id}").SendAsync("Notify", user.Name, "logout");
+            if (user != null)
+            {
+                await _hubContext.Clients.Group($"rooms/{user.Room.Id}").SendAsync("Notify", user.Name, "logout");
+            }
+
             /* Redirect to home page: */
             return RedirectToAction("Index", "Home");
         }
