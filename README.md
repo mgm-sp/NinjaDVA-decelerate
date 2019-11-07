@@ -138,3 +138,4 @@ name of the room you want to see.
 * slides
 * access attacker websites automatically
 * JoinRoom for the correct room returns the flag?
+* create a user and room for the bot at startup (admission code is the flag?)
