@@ -2,18 +2,20 @@
 import sys, time, urllib.parse, threading, random, ctypes, os.path
 import requests
 
-if len(sys.argv) < 3:
-    print('Usage: %s rootUrl numberOfUsers' % sys.argv[0])
+if len(sys.argv) < 4:
+    print('Usage: %s rootUrl roomCode numberOfUsers' % sys.argv[0])
     sys.exit(1)
 
 rootUrl = sys.argv[1]
-numberOfUsers = int(sys.argv[2])
+roomCode = sys.argv[2]
+numberOfUsers = int(sys.argv[3])
 
 
 class Session(requests.Session):
-    def __init__(self, username):
+    def __init__(self, username, roomCode):
         super().__init__()
         self.username = username
+        self.roomCode = roomCode
 
     def __enter__(self):
         super().__enter__()
@@ -21,12 +23,16 @@ class Session(requests.Session):
         # Get CSRF token from login page:
         print('[%s] Getting CSRF token for login ...' % self.username)
         response = self.get(rootUrl)
-        csrfToken = response.text.split('value="')[2].split('"')[0]
+        csrfToken = response.text.split('type="hidden" value="')[1].split('"')[0]
         print('[%s] Got CSRF token for login: %s' % (self.username, csrfToken))
 
         # Login:
         print('[%s] Logging in ...' % self.username)
-        self.post(rootUrl, data={'Name': self.username, '__RequestVerificationToken': csrfToken})
+        self.post(rootUrl, data={
+            'Name': self.username,
+            'RoomCode': self.roomCode,
+            '__RequestVerificationToken': csrfToken
+        })
         print('[%s] Logged in.' % self.username)
 
         # Return session:
@@ -57,8 +63,13 @@ class Session(requests.Session):
 class BotThread(threading.Thread):
     exit = False
 
+    def __init__(self, *args, **kwargs):
+        self.roomCode = kwargs['roomCode']
+        del kwargs['roomCode']
+        super().__init__(*args, **kwargs)
+
     def run(self):
-        with Session(self.getName()) as session:
+        with Session(self.getName(), self.roomCode) as session:
             delayLeft = random.uniform(0, 60)
             while not self.exit:
                 if delayLeft <= 0:
@@ -81,7 +92,7 @@ def getName():
 
 threads = []
 for i in range(numberOfUsers):
-    thread = BotThread(name=getName())
+    thread = BotThread(name=getName(), roomCode=roomCode)
     thread.start()
     threads.append(thread)
 
