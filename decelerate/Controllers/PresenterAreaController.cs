@@ -203,7 +203,8 @@ namespace decelerate.Controllers
             }
 
             /* Check presenter password (even if the username is invalid): */
-            var passwordHash = (presenter == null) ? "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" : presenter.PasswordHash;
+            var defaultHash = BCrypt.Net.BCrypt.HashPassword("");
+            var passwordHash = (presenter == null) ? defaultHash : presenter.PasswordHash;
             if (!BCrypt.Net.BCrypt.Verify(input.Password, passwordHash))
             {
                 invalid = true;
