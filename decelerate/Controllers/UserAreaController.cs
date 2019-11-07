@@ -100,7 +100,7 @@ namespace decelerate.Controllers
                 Expires = DateTime.Now.AddDays(-1)
             });
             /* Notify presenter about the logout: */
-            await _hubContext.Clients.All.SendAsync("Notify", user.Name, "logout");
+            await _hubContext.Clients.Group($"rooms/{user.Room.Id}").SendAsync("Notify", user.Name, "logout");
             /* Redirect to home page: */
             return RedirectToAction("Index", "Home");
         }
@@ -131,7 +131,7 @@ namespace decelerate.Controllers
                 /* Show success message to the user: */
                 ViewData["ShowModal"] = true;
                 /* Notify presenter about the new vote: */
-                await _hubContext.Clients.All.SendAsync("Notify", user.Name, "vote", input.SpeedChoice);
+                await _hubContext.Clients.Group($"rooms/{user.Room.Id}").SendAsync("Notify", user.Name, "vote", input.SpeedChoice);
             }
         }
     }

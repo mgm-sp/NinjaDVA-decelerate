@@ -288,31 +288,12 @@ namespace decelerate.Controllers
 
         private Presenter GetPresenter()
         {
-            /* Get presenter from database and fetch the rooms: */
-            var presenter = _dbContext.Presenters.First(p => p.Name == User.Identity.Name);
-            _dbContext.Entry(presenter).Collection(p => p.Rooms).Load();
-            return presenter;
+            return PresenterAuthHelper.GetPresenter(_dbContext, User);
         }
 
         private Room GetRoom(int roomId)
         {
-            /* Check if room exists: */
-            var room = _dbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
-            if (room == null)
-            {
-                return null;
-            }
-
-            /* Check if presenter owns the room: */
-            if (room.PresenterName != User.Identity.Name)
-            {
-                return null;
-            }
-
-            /* Fetch the users: */
-            _dbContext.Entry(room).Collection(r => r.Users).Load();
-
-            return room;
+            return PresenterAuthHelper.GetRoom(roomId, _dbContext, User);
         }
     }
 }

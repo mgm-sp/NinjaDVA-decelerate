@@ -45,6 +45,14 @@
         });
     }
 
+    /* Fallback function: */
+    function fallbackToPolling(err) {
+        /* Fall back to polling at a regular interval: */
+        console.log("SignalR error, falling back to regular polling.")
+        poll(true);
+        return console.error(err.toString());
+    }
+
     /* SignalR hub: */
     var hub = new signalR.HubConnectionBuilder().withUrl($('#hubUrl').attr('href')).build();
     hub.on('Notify', function (user, type, arg) {
@@ -55,16 +63,11 @@
     });
     hub.onclose(function (err) {
         if (err !== undefined) {
-            /* Fall back to polling at a regular interval: */
-            console.log("SignalR error, falling back to regular polling.")
-            poll(true);
-            return console.error(err.toString());
+            fallbackToPolling(err);
         }
     })
-    hub.start().catch(function (err) {
-        /* Fall back to polling at a regular interval: */
-        console.log("SignalR error, falling back to regular polling.")
-        poll(true);
-        return console.error(err.toString());
-    });
+    hub.start().then(function () {
+        /* Join room: */
+        hub.invoke('JoinRoom', parseInt($('#roomId').val())).catch(fallbackToPolling);
+    }).catch(fallbackToPolling);
 })();

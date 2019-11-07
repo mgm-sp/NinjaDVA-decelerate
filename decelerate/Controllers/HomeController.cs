@@ -107,7 +107,7 @@ namespace decelerate.Controllers
             });
 
             /* Notify presenter about the login: */
-            await _hubContext.Clients.All.SendAsync("Notify", user.Name, "login");
+            await _hubContext.Clients.Group($"rooms/{room.Id}").SendAsync("Notify", user.Name, "login");
 
             /* Return response: */
             return RedirectToAction("Index", "UserArea");
