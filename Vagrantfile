@@ -21,6 +21,11 @@ Vagrant.configure("2") do |config|
   # disable standard synced folder
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  # remove old sources from the guest system
+  config.vm.provision "shell", inline: <<-END
+    rm -rf decelerate
+  END
+
   # copy sources to the guest system
   config.vm.provision "file", source: "decelerate", destination: "decelerate"
 
