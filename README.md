@@ -155,4 +155,3 @@ name of the room you want to see.
   * RCE allows users to destroy the application (at least until restart) and get the flag for the websocket vulnerability
   * JwtKey as flag for deserialization vulnerability?
   * add class which uploads a file to a server? but could also be used to get admission code
-* logout in presenter.js
