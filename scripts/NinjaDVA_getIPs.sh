@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-for dir in *_vm; do
+for f in **/Vagrantfile; do
+  dir=$(dirname $f)
   if [[ "$dir" = "your_vulnerable_vm" ]] || [[ "$dir" = "gateway_vm" ]]; then
     continue
   fi
