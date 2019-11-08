@@ -39,7 +39,14 @@ Vagrant.configure("2") do |config|
   # if yes copy challenges to dashboard vm
   if File.exists?("../ninjadva.rb")
     require "../ninjadva"
-    NinjaDVA.new(config)
+    NinjaDVA.new(
+      config,
+      {
+        link_widget_links: [
+          { :hostname => "decelerate", :name => "decelerate" },
+        ]
+      }
+    )
   end
 
 end
