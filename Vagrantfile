@@ -38,38 +38,6 @@ Vagrant.configure("2") do |config|
       args: "-p 80:80"
   end
 
-  # install PhantomJS
-  config.vm.provision "shell", inline: <<-END
-    apt-get -y install libfontconfig1
-    cd /tmp
-    wget --quiet https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-    tar xf phantomjs-2.1.1-linux-x86_64.tar.bz2
-    cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
-    rm -rf phantomjs-2.1.1-linux-x86_64{,.tar.bz2}
-  END
-
-  # install CasperJS
-  config.vm.provision "shell", inline: <<-END
-    apt-get -y install git
-    rm -rf casperjs
-    git clone git://github.com/casperjs/casperjs.git
-    cd casperjs
-    ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
-  END
-
-  # setup API webserver
-  config.vm.provision "file", source: "attacks/websocket/apiserver.service", destination: "apiserver.service"
-  config.vm.provision "file", source: "attacks/websocket/presenter.cgi", destination: "api/cgi-bin/presenter.cgi"
-  config.vm.provision "file", source: "attacks/websocket/presenter.js", destination: "presenter.js"
-  config.vm.provision "shell", inline: <<-END
-    mv apiserver.service /etc/systemd/system/
-    chmod +x api/cgi-bin/presenter.cgi
-    systemctl daemon-reload
-    systemctl enable apiserver.service
-    systemctl restart apiserver.service
-  END
-
-
 
   #----------------- ninjaDVA specific configuration -------------------------------
   # test whether the vm is started in ninjaDVA context
