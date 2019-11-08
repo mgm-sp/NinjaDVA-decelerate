@@ -111,6 +111,11 @@ namespace decelerate.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Help()
+        {
+            return View();
+        }
+
         private bool IsAuthenticated(out IActionResult result, out User user)
         {
             if (_authManager.IsAuthenticated(Request.Cookies["session"], _dbContext, out user, out string errorMessage))

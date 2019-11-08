@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Help";
+    ViewData["HomeController"] = "UserArea";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Help Center</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <p>
+            Please report any problems with <em>decelerate</em> to our administrators using the form.
+            If you encountered an error on a specific page, please enter the URL in the corresponding text field.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <form method="post" action="http://@Context.Request.Host.Host:8888/SubmitHelp.cgi">
+            <div class="form-group">
+                <label for="Subject">Subject</label>
+                <input class="form-control" name="Subject" id="Subject" placeholder="Enter a subject" />
+            </div>
+            <div class="form-group">
+                <label for="Url">URL</label>
+                <input class="form-control" name="Url" id="Url" placeholder="Enter the URL where you encountered the error" />
+            </div>
+            <div class="form-group">
+                <label for="Message">Message</label>
+                <textarea class="form-control" name="Message" id="Message" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
