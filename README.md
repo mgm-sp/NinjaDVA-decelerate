@@ -19,6 +19,20 @@ Configuration is done in `decelerate/appsettings.json`.
 * **UserTimeoutSeconds**
   * time after which an inactive user gets logged out automatically (in seconds)
   * after automatic logout, the vote of the user is removed and the username is available again
+* **InitialPresenter**
+  * name and password for a presenter account that is automatically created at startup **if no presenters exist
+    yet**
+  * if you don't want to create an initial presenter, just leave the name empty
+* **InitialRoom**
+  * configuration for a room that is automatically created at startup **if no presenters or rooms exist yet and
+    the initial presenter is configured properly**
+  * the initial presenter owns this room
+  * if you don't want to create an initial room, just leave the name empty
+
+> :warning: **Note**: Changes to the **InitialPresenter** and **InitialRoom** are only applied if no presenters
+> or no rooms and presenters, respectively, exist yet.
+> However, this is always the case for the Docker container and NinjaDVA because they start with an empty
+> database.
 
 ## Docker Container
 > :warning: **Note:** When you use the Docker container, restarting it wipes the complete database, i.e.
@@ -47,7 +61,7 @@ cd NinjaDVA
 ```shell
 git clone git@spcode.mgm-edv.de:NinjaDVA/decelerate.git decelerate_vm
 ```
-3. Configure decelerate (change *JwtKey*):
+3. Configure decelerate (change *JwtKey*, *InitialPresenter ⇒ Password*, *InitialRoom ⇒ AdmissionCode*):
 ```shell
 vim decelerate_vm/decelerate/appsettings.json
 ```
