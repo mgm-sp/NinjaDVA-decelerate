@@ -147,11 +147,3 @@ presenter area, which now lists your newly created room:
 
 Here you can copy the admission codes for your rooms and go to the individual room overviews by clicking on the
 name of the room you want to see.
-
-## Todo List
-* slides
-* access attacker websites automatically
-* change deserialization gadget
-  * RCE allows users to destroy the application (at least until restart) and get the flag for the websocket vulnerability
-  * JwtKey as flag for deserialization vulnerability?
-  * add class which uploads a file to a server? but could also be used to get admission code
