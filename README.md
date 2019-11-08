@@ -152,3 +152,4 @@ name of the room you want to see.
 * slides
 * access attacker websites automatically
 * JwtKey as flag for deserialization vulnerability?
+* add class which uploads a file to a server? but could also be used to get admission code
