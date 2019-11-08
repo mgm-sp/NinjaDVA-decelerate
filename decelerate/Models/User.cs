@@ -17,6 +17,9 @@ namespace decelerate.Models
         public int RoomId { get; set; }
         [JsonIgnore]
         public virtual Room Room { get; set; }
+        public bool ShouldSerializeRoom() { return false; }
+        /* ^- Thanks to this method, SignalR won't serialize the Room property,
+         * preventing a loop User -> Room -> User -> Room -> ... */
 
         public int? SpeedChoice { get; set; }
 

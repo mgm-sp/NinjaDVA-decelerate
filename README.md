@@ -151,6 +151,4 @@ name of the room you want to see.
 ## Todo List
 * slides
 * access attacker websites automatically
-* JoinRoom for the correct room returns the flag?
-* create a user and room for the bot at startup (admission code is the flag?)
-  * or with an extra script, otherwise the vulnerability is pretty obvious inside the code
+* JwtKey as flag for deserialization vulnerability?

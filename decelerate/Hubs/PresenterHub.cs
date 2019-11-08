@@ -18,17 +18,21 @@ namespace decelerate.Hubs
             _dbContext = dbContext;
         }
 
-        public async Task JoinRoom(int id)
+        public async Task<Room> JoinRoom(int id)
         {
             /* Check access rights and get room: */
             var room = PresenterAuthHelper.GetRoom(id, _dbContext, Context.User);
             if (room == null)
             {
                 Context.Abort();
+                return null;
             }
 
             /* Join room: */
             await Groups.AddToGroupAsync(Context.ConnectionId, $"rooms/{room.Id}");
+
+            /* Return room information: */
+            return room;
         }
     }
 }
