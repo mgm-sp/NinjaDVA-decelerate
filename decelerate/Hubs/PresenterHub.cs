@@ -28,6 +28,12 @@ namespace decelerate.Hubs
                 return null;
             }
 
+            /* Remove room information from users to prevent infinite recursion: */
+            foreach (var user in room.Users)
+            {
+                user.Room = null;
+            }
+
             /* Join room: */
             await Groups.AddToGroupAsync(Context.ConnectionId, $"rooms/{room.Id}");
 
